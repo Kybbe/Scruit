@@ -1,0 +1,163 @@
+* {
+  text-align: center;
+}
+
+input {
+  width: 50%;
+}
+
+.card, .droppableContainer, .addBoard {
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.draggable, .droppableContainer, .addBoard {
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.boards {
+  display: flex;
+  overflow: scroll;
+  min-height: 80vh;
+}
+
+.droppableContainer {
+  position: relative;
+  background-color: #F6F8FA;
+}
+
+.droppable {
+  position: relative;
+  width: 280px;
+  border-radius: 5px;
+  padding-top: 5px;
+  flex-shrink: 0;
+  min-height: calc(100% - 38px);
+}
+
+.over-droppable {
+  background-color: lightblue;
+}
+
+.outside-droppable {
+  background-color: red;
+}
+
+.addBoard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 190px;
+}
+
+.addBoard input {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 0;
+}
+
+.addBoard button {
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.addBoard > * {
+  box-sizing: border-box;
+  width: 95%;
+  margin: 5px;
+}
+
+.trash {
+  background-color: lightcoral;
+  background-image: url(./trashcan.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px;
+  width: 282px;
+  height: 122px;
+  min-height: unset !important;
+}
+
+.boardDeleter {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+}
+
+.boardDeleter svg {
+  fill: black;
+  width: 20px;
+  height: 20px;
+  transition: fill 0.2s ease;
+}
+
+.boardDeleter svg:hover {
+  fill: red;
+  cursor: pointer;
+}
+
+.boardTitle {
+  margin: 0;
+  margin-top: 5px;
+}
+
+.boardCounter {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  background-color: rgba(211, 211, 211, 0.4);
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  padding: 5px;
+  margin: 0;
+}
+
+.draggable:hover .flip-card {
+  background-color: #F6F8FA;
+}
+
+.card {
+  background-color: white;
+  color: black;
+  width: 100%;
+  height: 100px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  position: relative;
+}
+
+.menu {
+  display: none;
+}
+
+.menuOpen .menu {
+  display: unset;
+}
+
+.openMenu {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 2em;
+  height: 45px;
+  width: 40px;
+  padding: 10px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,5 @@
+Fix modal for editing cards.
+Move card main text down so its not in the way for …
+Make the board vertical and boards 100vh on mobile
+Fix add card thingy
+Save cards and boards to local storage
