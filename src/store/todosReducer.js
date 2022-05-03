@@ -1,71 +1,57 @@
 const initialState = {
-  todos: [],
-  boards: [],
+  todos: {},
 };
 
 const MenuReducer = (state = initialState, action) => {
   switch(action.type) {
-    //send in entire menu
-    case 'ADD_TODO':
+    //payload is an object with the following properties:
+    // name: the name of the board to which the todo belongs
+    // todo: the todo object
+    case "ADD_TODO":
+      let todosInBoard = state.todos[action.payload.name];
+      todosInBoard.push(action.payload.todo);
+
+      //add todosInBoard to state.todos
+      let newTodos = {...state.todos};
+      newTodos[action.payload.name] = todosInBoard;
+
       return {
-        ...state,
-        todos: [...state.todos, action.payload]
-      }
+        ...state, 
+        todos: newTodos
+      };
     case 'REMOVE_TODO':
-      //remove todo with id in payload
-      let newArr = state.todos.filter(todo => todo.id !== action.payload)
-      //lower id of all todo in todos array
-      newArr = newArr.map(todo => {
-        if (todo.id > action.payload) {
-          todo.id--;
-        }
-        return todo;
-      })
+      let todosInBoardToRemove = state.todos[action.payload.board];
+      let newTodosToKeep = todosInBoardToRemove.filter(todo => todo.id !== Number(action.payload.id));
+
+      //add todosInBoardToRemove to state.todos
+      let newTodosToRemoveState = {...state.todos};
+      newTodosToRemoveState[action.payload.board] = newTodosToKeep;
 
       return {
         ...state,
-        todos: newArr
-      }
-    case 'REORDER_TODO':
+        todos: newTodosToRemoveState
+      };
+    case 'UPDATE_TODOS':
       return {
         ...state,
         todos: action.payload
-      }
-    case 'CHANGE_TODO_BOARD':
-      //change boardId of todo with id in payload
-      let newTodos = state.todos.map(todo => {
-        if (todo.id === action.payload.id) {
-          todo.boardId = action.payload.boardId;
-        }
-        return todo;
-      })
-      return {
-        ...state,
-        todos: newTodos
-      }
-    case 'ADD_BOARD':
-      return {
-        ...state,
-        boards: [...state.boards, action.payload]
-      }
-    case 'REMOVE_BOARD':
-      let newBoardArr = state.boards.filter(board => board.id !== action.payload)
-
-      newBoardArr = newBoardArr.map(board => {
-        if (board.id > action.payload) {
-          board.id--;
-        }
-        return board;
-      })
-
-      //remove all todos with boardId equal to payload
-      let newTodoArr = state.todos.filter(todo => todo.boardId !== action.payload+1)
+      };
+    case "ADD_BOARD":
+      let newBoards = {...state.todos};
+      newBoards[action.payload] = []; //initialize new board with empty todos array
 
       return {
         ...state,
-        boards: newBoardArr,
-        todos: newTodoArr
-      }
+        todos: newBoards
+      };
+    case "REMOVE_BOARD":
+      let newBoards2 = {...state.todos};
+      delete newBoards2[action.payload];
+
+      return {
+        ...state,
+        todos: newBoards2
+      };
     default:
       return state
     }

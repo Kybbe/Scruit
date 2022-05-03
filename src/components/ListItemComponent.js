@@ -2,13 +2,13 @@ import { useRef } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDispatch } from "react-redux";
 
-export default function ListItemComponent({todo, index}) {
+export default function ListItemComponent({todo, index, board}) {
 
   const dispatch = useDispatch();
   const card = useRef({});
 
   function deleteTodo(id) {
-    dispatch({ type: "REMOVE_TODO", payload: id });
+    dispatch({ type: "REMOVE_TODO", payload: {id: id, board: board} });
   }
 
   function editCard() {
@@ -29,7 +29,7 @@ export default function ListItemComponent({todo, index}) {
   }
 
   return (
-    <Draggable draggableId={"draggable-" + index} key={index} index={index}>
+    <Draggable draggableId={String(todo.id)} key={todo.id} index={index}>
       {(provided, snapshot) => (
         <div
         ref={provided.innerRef}

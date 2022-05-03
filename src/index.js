@@ -7,10 +7,19 @@ import todosReducer from './store/todosReducer';
 import './index.css';
 import App from './App';
 
+const persistedState = localStorage.getItem('Scruit')
+                       ? JSON.parse(localStorage.getItem('Scruit'))
+                       : { todos: {} }
+
 const store = createStore(
   todosReducer,
+  persistedState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+store.subscribe(()=>{
+  localStorage.setItem('Scruit', JSON.stringify(store.getState()))
+})
 
 ReactDOM.render(
   <React.StrictMode>

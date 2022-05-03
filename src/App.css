@@ -16,6 +16,10 @@ input {
   margin: 5px;
 }
 
+.draggable {
+  margin-top: 0;
+}
+
 .boards {
   display: flex;
   overflow: scroll;
@@ -37,11 +41,7 @@ input {
 }
 
 .over-droppable {
-  background-color: lightblue;
-}
-
-.outside-droppable {
-  background-color: red;
+  background-color: rgb(214, 228, 233);
 }
 
 .addBoard {
@@ -93,6 +93,7 @@ input {
   right: 5px;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 
 .boardDeleter svg {
@@ -102,9 +103,8 @@ input {
   transition: fill 0.2s ease;
 }
 
-.boardDeleter svg:hover {
+.boardDeleter:hover svg {
   fill: red;
-  cursor: pointer;
 }
 
 .boardTitle {
@@ -160,4 +160,20 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 500px) {
+  .boards {
+    flex-direction: column;
+    overflow-X: hidden;
+  }
+
+  .droppable {
+    width: calc(100% - 12px);
+    min-height: 110px;
+  }
+
+  .trash {
+    width: 100%;
+  }
 }

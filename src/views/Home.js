@@ -8,16 +8,29 @@ import ListComponent from "../components/ListComponent";
 export default function Home() {
 
   const dispatch = useDispatch();
-  const boards = useSelector(state => state.boards);
   const todos = useSelector(state => state.todos);
+  const boards = Object.keys(todos);
+  let totalAmountTodos = 0;
+  boards.forEach(board => {
+    if(todos[board].length > 0) {
+      totalAmountTodos += todos[board].length;
+    }
+  });
   const todoName = useRef("")
   const boardName = useRef("")
   const selectedBoard = useRef(0)
+  var addedKanban = false;
 
   function addTodo() {
     let name = todoName.current.value;
     if (name) {
-      dispatch({ type: "ADD_TODO", payload: {name: name, id: todos.length, boardId: Number(selectedBoard.current.value)} });
+      //find board by board.id, and make todo.order equal to the length of that board's todos array
+      let newTodo = {
+        name: name,
+        id: totalAmountTodos,
+      }
+
+      dispatch({ type: "ADD_TODO", payload: {name: selectedBoard.current.value, todo: newTodo}});
       todoName.current.value = "";
     }
   }
@@ -25,8 +38,27 @@ export default function Home() {
   function addBoard(){
     let name = boardName.current.value;
     if (name) {
-      dispatch({ type: "ADD_BOARD", payload: {title: name, id: boards.length} });
+      dispatch({ type: "ADD_BOARD", payload: name });
       boardName.current.value = "";
+    }
+  }
+
+  async function addKanbanPreset() {
+    if (!addedKanban) {
+      await dispatch({ type: "ADD_BOARD", payload: "To Do" });
+      await dispatch({ type: "ADD_BOARD", payload: "In Progress" });
+      await dispatch({ type: "ADD_BOARD", payload: "Done" });
+
+      let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep"];
+      let todos = names.map((name, index) => {
+        let newTodo = {
+          name: name,
+          id: index,
+        }
+        return newTodo;
+      })
+      todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: "To Do", todo: todo} }))
+      addedKanban = true;
     }
   }
 
@@ -41,40 +73,42 @@ export default function Home() {
     }
   }
 
-  const onBeforeCapture = () => {
-    /*...*/
+  const removeFromList = (list, index) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(index, 1);
+    return [removed, result];
   };
-  const onBeforeDragStart = () => {
-    /*...*/
+  
+  const addToList = (list, index, element) => {
+    const result = Array.from(list);
+    result.splice(index, 0, element);
+    return result;
   };
-  const onDragStart = () => {
-    /*...*/
-  };
-  const onDragUpdate = (result) => {
-    /*...*/
-  };
+
   function onDragEnd(result) {
-    if(!result.destination) { return; }
-    if(result.destination.droppableId === "TRASH"){
-      dispatch({ type: "REMOVE_TODO", payload: result.source.index });
+    const { destination, source, draggableId } = result;
+    if(!destination) { return; }
+    if(destination.droppableId === "TRASH"){
+      dispatch({ type: "REMOVE_TODO", payload: {board: source.droppableId, id: draggableId} });
       return;
     }
+    
+    const listCopy = { ...todos };
 
-    //if the draggable is dropped in a new droppable,
-    //we need to change the boardId of the todo
-    if (result.destination.droppableId !== result.source.droppableId) {
-      let newBoardId = Number(result.destination.droppableId.split("-")[1]) +1;
-      dispatch({ type: "CHANGE_TODO_BOARD", payload: {id: result.source.index, boardId: newBoardId} });
-    }
-    else {
-      const items = Array.from(todos);
-      const [reorderedItem] = items.splice(result.source.index, 1);
-      items.splice(result.destination.index, 0, reorderedItem);
+    const sourceList = listCopy[source.droppableId];
+    const [removedElement, newSourceList] = removeFromList(
+      sourceList,
+      source.index
+    );
+    listCopy[source.droppableId] = newSourceList;
+    const destinationList = listCopy[destination.droppableId];
+    listCopy[destination.droppableId] = addToList(
+      destinationList,
+      destination.index,
+      removedElement
+    );
 
-      dispatch({ type: "REORDER_TODO", payload: items });
-
-      console.log("items", items);
-    }
+    dispatch({ type: "UPDATE_TODOS", payload: listCopy });
   };
 
   return (
@@ -84,27 +118,24 @@ export default function Home() {
           <div>
             <input id="todoName" type="text" ref={todoName} onKeyDown={handleKeyDown} placeholder="As a [who], I want [what] so that [why]"></input>
             <button onClick={addTodo}>Add Todo</button>
-            <select id="selectBoard" ref={selectedBoard} defaultValue="0">
+            <select id="selectBoard" ref={selectedBoard} defaultValue={boards[0]}>
               {boards.map((board, index) => (
-                <option key={index} value={board.id +1}>{board.title}</option>
+                <option key={index} value={board}>{board}</option>
               ))}
             </select>
           </div>
         ) : (
-          <p>Add a board down below!</p>
+          <div>
+            <p>Add a board down below!</p>
+            <button onClick={addKanbanPreset}>Add kanban preset</button>
+          </div>
         )}
 
-      <DragDropContext
-        onBeforeCapture={onBeforeCapture}
-        onBeforeDragStart={onBeforeDragStart}
-        onDragStart={onDragStart}
-        onDragUpdate={onDragUpdate}
-        onDragEnd={onDragEnd}
-      >
+      <DragDropContext onDragEnd={onDragEnd}>
         <div className="boards"
         >
           {boards.map((board, index) => (
-            <ListComponent key={board.id} board={board} index={index} listWidth={100 / boards.length} />
+            <ListComponent key={index} board={board} index={index}/>
           ))}
           <div className="addBoard droppable">
             <input id="boardName" type="text" ref={boardName} onKeyDown={handleKeyDown} placeholder="Board title"></input>
