@@ -37,7 +37,6 @@ input {
   border-radius: 5px;
   padding-top: 5px;
   flex-shrink: 0;
-  min-height: calc(100% - 38px);
 }
 
 .over-droppable {
@@ -108,8 +107,7 @@ input {
 }
 
 .boardTitle {
-  margin: 0;
-  margin-top: 5px;
+  margin: 5px 35px 0px 35px;
 }
 
 .boardCounter {
@@ -132,23 +130,51 @@ input {
   background-color: white;
   color: black;
   width: 100%;
-  height: 100px;
+  min-height: 80px;
   box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
   position: relative;
 }
 
+.todoName {
+  margin: 1.33em 5px 8px 5px;
+  word-break: break-word;
+}
+
+/* To hide men when not open */
 .menu {
   display: none;
 }
 
+/* The menu when its open */
 .menuOpen .menu {
-  display: unset;
+  border: 1px solid black;
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  background-color: white;
+  padding: 6px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.2);
 }
 
+.menuOpen .menu button {
+  margin: 1px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+/* The ... button to open menu */
 .openMenu {
   position: absolute;
-  top: 0px;
-  right: 10px;
+  top: -10px;
+  right: 0px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -162,14 +188,87 @@ input {
   align-items: center;
 }
 
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
+  border: 1px solid grey;
+}
+
+.modal > * {
+  margin: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.closeModal {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: unset;
+}
+
+.hidden {
+  display: none;
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: rgb(255, 192, 255);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  overflow: hidden;
+  text-align: center;
+  flex-shrink: 0;
+  word-break: break-all;
+  max-width: 250px;
+}
+
+.coffee, .Coffee {
+  background-color: rgb(83, 50, 4);
+  color: white;
+}
+
 @media (max-width: 500px) {
   .boards {
     flex-direction: column;
     overflow-X: hidden;
   }
 
-  .droppable {
+  .addBoard.droppable {
     width: calc(100% - 12px);
+  }
+
+  .droppable {
+    width: 100%;
     min-height: 110px;
   }
 

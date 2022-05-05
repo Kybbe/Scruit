@@ -4,30 +4,33 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { Droppable } from 'react-beautiful-dnd';
 
 import ListComponent from "../components/ListComponent";
+import UniversalModal from "../components/UniversalModal";
+
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
 
   const dispatch = useDispatch();
   const todos = useSelector(state => state.todos);
   const boards = Object.keys(todos);
-  let totalAmountTodos = 0;
-  boards.forEach(board => {
-    if(todos[board].length > 0) {
-      totalAmountTodos += todos[board].length;
-    }
-  });
+  const tagsInput = useRef("");
   const todoName = useRef("")
   const boardName = useRef("")
   const selectedBoard = useRef(0)
-  var addedKanban = false;
 
   function addTodo() {
     let name = todoName.current.value;
+    let tags = tagsInput.current.value;
+
+    // make tags a array of strings split by ", "
+    tags = tags.split(", ");
+    if(tags[0] === "") { tags = []; }
     if (name) {
       //find board by board.id, and make todo.order equal to the length of that board's todos array
       let newTodo = {
         name: name,
-        id: totalAmountTodos,
+        id: uuidv4(),
+        tags: tags,
       }
 
       dispatch({ type: "ADD_TODO", payload: {name: selectedBoard.current.value, todo: newTodo}});
@@ -44,22 +47,38 @@ export default function Home() {
   }
 
   async function addKanbanPreset() {
-    if (!addedKanban) {
-      await dispatch({ type: "ADD_BOARD", payload: "To Do" });
-      await dispatch({ type: "ADD_BOARD", payload: "In Progress" });
-      await dispatch({ type: "ADD_BOARD", payload: "Done" });
+    await dispatch({ type: "ADD_BOARD", payload: "To Do" });
+    await dispatch({ type: "ADD_BOARD", payload: "In Progress" });
+    await dispatch({ type: "ADD_BOARD", payload: "Done" });
 
-      let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep"];
-      let todos = names.map((name, index) => {
-        let newTodo = {
-          name: name,
-          id: index,
-        }
-        return newTodo;
-      })
-      todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: "To Do", todo: todo} }))
-      addedKanban = true;
-    }
+    let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep"];
+    let todos = names.map((name, index) => {
+      let newTodo = {
+        name: name,
+        id: uuidv4(),
+        tags: ["coffee"],
+      }
+      return newTodo;
+    })
+    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: "To Do", todo: todo} }))
+  }
+
+  async function addLargeKanbanPreset() {
+    let boardNames = ["To Do", "Backlog", "Sprint backlog", "In Progress", "Testing", "Needs to be deployed", "Done"];
+    boardNames.forEach(name => dispatch({ type: "ADD_BOARD", payload: name }))
+
+    let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
+    let tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff"];
+    let todos = names.map((name, index) => {
+      let newTodo = {
+        name: name,
+        id: uuidv4(),
+        tags: tags.slice(Math.floor(Math.random() * tags.length)),
+      }
+      let randomBoard = Math.floor(Math.random() * boardNames.length);
+      return {name: boardNames[randomBoard], todo: newTodo};
+    })
+    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: todo.name, todo: todo.todo} }))
   }
 
   function handleKeyDown(e) {
@@ -117,6 +136,7 @@ export default function Home() {
         { boards.length > 0 ? (
           <div>
             <input id="todoName" type="text" ref={todoName} onKeyDown={handleKeyDown} placeholder="As a [who], I want [what] so that [why]"></input>
+            <input id="tags" type="text" ref={tagsInput} placeholder="Tags, seperated, with, commas"></input>
             <button onClick={addTodo}>Add Todo</button>
             <select id="selectBoard" ref={selectedBoard} defaultValue={boards[0]}>
               {boards.map((board, index) => (
@@ -128,6 +148,7 @@ export default function Home() {
           <div>
             <p>Add a board down below!</p>
             <button onClick={addKanbanPreset}>Add kanban preset</button>
+            <button onClick={addLargeKanbanPreset}>Add large kanban preset</button>
           </div>
         )}
 
@@ -154,6 +175,7 @@ export default function Home() {
           </div>
         </div>
       </DragDropContext>
+      <UniversalModal />
     </div>
   );
 }
