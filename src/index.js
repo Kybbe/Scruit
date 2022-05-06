@@ -9,7 +9,7 @@ import App from './App';
 
 const persistedState = localStorage.getItem('Scruit')
                        ? JSON.parse(localStorage.getItem('Scruit'))
-                       : { todos: {} }
+                       : { todos: {}, currentEditTodo: {}, colors: [] };
 
 const store = createStore(
   todosReducer,

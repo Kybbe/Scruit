@@ -1,6 +1,7 @@
 const initialState = {
   todos: {},
-  currentEditTodo: {}
+  currentEditTodo: {},
+  colors: []
 };
 
 const MenuReducer = (state = initialState, action) => {
@@ -22,7 +23,7 @@ const MenuReducer = (state = initialState, action) => {
       }
     case 'REMOVE_TODO':
       let todosInBoardToRemove = state.todos[action.payload.board];
-      let newTodosToKeep = todosInBoardToRemove.filter(todo => todo.id !== Number(action.payload.id));
+      let newTodosToKeep = todosInBoardToRemove.filter(todo => todo.id !== action.payload.id);
 
       //add todosInBoardToRemove to state.todos
       let newTodosToRemoveState = {...state.todos};
@@ -73,6 +74,18 @@ const MenuReducer = (state = initialState, action) => {
       return {
         ...state,
         currentEditTodo: action.payload
+      }
+    case 'DELETE_ALL':
+      return {
+        ...state,
+        todos: {},
+        currentEditTodo: {},
+        colors: []
+      }
+    case 'SET_COLORS':
+      return {
+        ...state,
+        colors: action.payload
       }
     default:
       return state

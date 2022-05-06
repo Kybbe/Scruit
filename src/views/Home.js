@@ -5,6 +5,7 @@ import { Droppable } from 'react-beautiful-dnd';
 
 import ListComponent from "../components/ListComponent";
 import UniversalModal from "../components/UniversalModal";
+import TagColorPicker from "../components/TagColorPicker";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -92,6 +93,14 @@ export default function Home() {
     }
   }
 
+  function deleteAll() {
+    dispatch({ type: "DELETE_ALL" });
+  }
+
+  function openColorPicker() {
+    document.getElementsByClassName("colorPickerMenu")[0].classList.toggle("openedColorPicker");
+  }
+
   const removeFromList = (list, index) => {
     const result = Array.from(list);
     const [removed] = result.splice(index, 1);
@@ -143,6 +152,11 @@ export default function Home() {
                 <option key={index} value={board}>{board}</option>
               ))}
             </select>
+            <div>
+              <button className="deleteAll" onClick={deleteAll}>Wipe Boards & Todos</button>
+              <button className="openColorPicker" onClick={openColorPicker}>Open Color Picker</button>
+              <TagColorPicker />
+            </div>
           </div>
         ) : (
           <div>

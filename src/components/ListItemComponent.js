@@ -44,7 +44,7 @@ export default function ListItemComponent({todo, index, board}) {
             {todo.tags.length > 0 ? 
               todo.tags.map((tag, index) => {
                 return (
-                  <div className={"tag " + tag} key={index}>
+                  <div className={"tag " + tag.toLowerCase()} key={index}>
                     {tag}
                   </div>
                 )

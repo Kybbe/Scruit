@@ -48,7 +48,7 @@ input {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 190px;
+  height: 100%;
 }
 
 .addBoard input {
@@ -82,8 +82,8 @@ input {
   background-position: center;
   background-size: 50px;
   width: 282px;
-  height: 122px;
-  min-height: unset !important;
+  min-height: 122px;
+  margin: 0;
 }
 
 .boardDeleter {
@@ -138,6 +138,40 @@ input {
 .todoName {
   margin: 1.33em 5px 8px 5px;
   word-break: break-word;
+}
+
+.deleteAll {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: white;
+  border: 1px solid grey;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deleteAll:hover {
+  background-color: red;
+}
+
+.openColorPicker {
+  position: absolute;
+  top: 38px;
+  right: 5px;
+  background-color: white;
+  border: 1px solid grey;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.openColorPicker:hover {
+  background-color: rgb(211, 211, 211);
 }
 
 /* To hide men when not open */
@@ -241,7 +275,7 @@ input {
 }
 
 .tag {
-  background-color: rgb(255, 192, 255);
+  background-color: lightgrey;
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
@@ -252,9 +286,79 @@ input {
   max-width: 250px;
 }
 
-.coffee, .Coffee {
-  background-color: rgb(83, 50, 4);
-  color: white;
+.colorPickerMenu {
+  box-sizing: border-box;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 0px;
+  right: 0px;
+  height: 100vh;
+  z-index: 3;
+
+  transform: translateX(420px);
+  transition: transform 0.4s ease;
+}
+
+.colorPickerMenuLeft {
+  position: relative;
+  padding-top: 10px;
+}
+
+.colorPickerMenuRight {
+  background-color: white;
+  padding: 10px;
+  border-left: 1px solid grey;
+  box-shadow: -8px 0px 10px -6px black;
+  margin-left: 10px;
+}
+
+.saveColor {
+  margin-top: 10px;
+}
+
+.closeColorPicker {
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+}
+
+.openedColorPicker {
+  transform: translateX(0px);
+}
+
+.saveColor, .closeColorPicker, .deselectTag {
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  transition: background-color 0.2s ease;
+  font-size: 1em;
+}
+
+.closeColorPicker:hover, .saveColor:hover {
+  background-color: rgb(211, 211, 211);
+}
+
+.color-picker-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.color-picker-tag {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  cursor: pointer;
+}
+
+.color-picker-tag.selected {
+  border: 2px solid blue;
+  transform: scale(1.1);
 }
 
 @media (max-width: 500px) {

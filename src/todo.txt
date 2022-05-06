@@ -1,3 +1,0 @@
-Fix modal for editing cards.
-Move card main text down so its not in the way for …
-Fix add card thingy
