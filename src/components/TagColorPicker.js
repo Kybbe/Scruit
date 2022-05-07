@@ -1,52 +1,23 @@
 import { SketchPicker } from 'react-color';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function TagColorPicker() {
+  const dispatch = useDispatch();
+
   const state = useSelector(state => state.todos);
   const colorsFromState = useSelector(state => state.colors);
-  const dispatch = useDispatch();
-  const keys = Object.keys(state);
-  const boards = keys.map(key => state[key]);
-  // boards = [[{todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}, {todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}]]
-  //collpase all todos into one array
-  let tags = [];
-  boards.forEach(board => {
-    board.forEach(todo => {
-      todo.tags.forEach(tag => {
-        tags.push(tag);
-      })
-    })
-  });
 
-  tags = [...new Set(tags)];
-  tags = tags.sort();
-  //tags = tags.map(tag => tag.toLowerCase());
-  console.log("tags ", tags);
+  const menu = useRef("");
+  const rightPane = useRef("");
 
-  let tagsAsObject = [];
-  tags.forEach(tag => {
-    tagsAsObject.push({
-      tag: tag,
-      color: ""
-    })
-  });
-
-  console.log("tagsAsObj ", tagsAsObject);
-
-  //go through all colors from state and set the color for each tag
-  if(colorsFromState){
-    colorsFromState.forEach(colorFromState => {
-      tagsAsObject.forEach(tag => {
-        if(tag.tag === colorFromState.tag){
-          tag.color = colorFromState.color;
-        }
-      })
-    });
-  }
-
+  const [width, setWidth] = useState(0)
   const [selectedTag, setSelectedTag] = useState("");
   const [color, setColor] = useState('#fe752d');
+
+  const keys = Object.keys(state);
+  const boards = keys.map(key => state[key]);
+
   const presetColors = [
     '#FFB5E8',
     '#FF9CEE',
@@ -63,6 +34,67 @@ export default function TagColorPicker() {
     '#FFCBC1',
     '#6f4e37',
   ];
+  // boards = [[{todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}, {todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}]]
+  //collpase all todos into one array
+  let tags = [];
+  boards.forEach(board => {
+    board.forEach(todo => {
+      todo.tags.forEach(tag => {
+        tags.push(tag);
+      })
+    })
+  });
+
+  useEffect(() => {
+    setWidth((menu.current.clientWidth) + "px")
+  })
+
+  useEffect(() => {
+    if(selectedTag !== ""){
+      rightPane.current.classList.remove("hidden");
+    } else {
+      rightPane.current.classList.add("hidden");
+    }
+  }, [selectedTag])
+
+  tags = [...new Set(tags)];
+  tags = tags.sort();
+  //tags = tags.map(tag => tag.toLowerCase());
+
+  let tagsAsObject = [];
+  tags.forEach(tag => {
+    tagsAsObject.push({
+      tag: tag,
+      color: ""
+    })
+  });
+
+  //go through all colors from state and set the color for each tag
+  if(colorsFromState){
+    colorsFromState.forEach(colorFromState => {
+      tagsAsObject.forEach(tag => {
+        if(tag.tag === colorFromState.tag){
+          tag.color = colorFromState.color;
+        }
+      })
+    });
+  }
+
+  function generateRandomColors(){
+    let randomColors = [];
+    tags.forEach(tag => {
+      randomColors.push({tag: tag, color: `#${Math.floor(Math.random() * 16777215).toString(16)}`});
+    });
+    dispatch({ type: 'SET_COLORS', payload: randomColors });
+  }
+
+  function randomPresetColors(){
+    let randomColors = [];
+    tags.forEach(tag => {
+      randomColors.push({tag: tag, color: presetColors[Math.floor(Math.random() * (presetColors.length - 1))]});
+    });
+    dispatch({ type: 'SET_COLORS', payload: randomColors });
+  }
 
   function onComplete(){
     //make tags an array of objects with tag and color
@@ -74,7 +106,6 @@ export default function TagColorPicker() {
         tag.color = color;
       }
     });
-    console.log("tagsASObj in onComplete ", tagsAsObject);
 
     setSelectedTag("")
 
@@ -109,30 +140,36 @@ export default function TagColorPicker() {
     
     var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
     
-    if (luma < 90) {
-      textStyle = "#fff"
-    } else {
+    if (luma > 90) {
       textStyle = "#000"
+    } else if(luma === 0){
+      textStyle = "#000"
+    } else {
+      textStyle = "#fff"
     }
-    sheet.insertRule(`.${tag.tag.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`, sheet.cssRules.length);
+    //remove spaces from tag.tag
+    let tagName = tag.tag.replace(/\s/g, '');
+    sheet.insertRule(`.${tagName.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`, sheet.cssRules.length);
   });
 
   function openColorPicker() {
-    document.getElementsByClassName("colorPickerMenu")[0].classList.toggle("openedColorPicker");
+    menu.current.classList.toggle("openedColorPicker");
+    rightPane.current.classList.add("hidden");
+    setSelectedTag("");
   }
 
   return (
-    <div className='colorPickerMenu'>
-      <div className='colorPickerMenuLeft'>
+    <div className='colorPickerMenu' ref={menu} style={{transform: `translateX(${width})`}}>
+      <div className='colorPickerMenuLeft' ref={rightPane}>
         <SketchPicker color={color} presetColors={presetColors} onChange={color => {
           setColor(color.hex);
         }} />
-        <button onClick={onComplete} className="saveColor">Save</button>
+        <button onClick={(e)=> {onComplete(); e.stopPropagation()}} className="saveColor">Save</button>
         
-        <button className='closeColorPicker' onClick={openColorPicker}>Close</button>
       </div>
-      <div className='colorPickerMenuRight'>
+      <div className='colorPickerMenuRight' onClick={() => {setSelectedTag("")}}>
         <h1>Tags</h1>
+        <p>Click on a tag to edit it's color</p>
         <div className='color-picker-tags'>
           {tags.map((tag, index) => {
             let thisTagsColor = "";
@@ -150,21 +187,26 @@ export default function TagColorPicker() {
             
             var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
             
-            if (luma < 90) {
-              thisTagsTextColor = "#fff"
-            } else {
+            if (luma > 90) {
               thisTagsTextColor = "#000"
+            } else if(luma === 0){
+              thisTagsTextColor = "#000"
+            } else {
+              thisTagsTextColor = "#fff"
             }
             return (
-              <div key={index} onClick={()=>{selectTag(tag)}} 
+              <div key={index} onClick={(e)=>{selectTag(tag); e.stopPropagation(); }} 
               className={`color-picker-tag ${selectedTag === tag ? "selected" : ""}`}
               style={selectedTag === tag ? {color: thisTagsTextColor, backgroundColor: color} : {color: thisTagsTextColor, backgroundColor: thisTagsColor}}>
                 {tag}
               </div>
             )
           })}
+          <button className='randomizeColors' onClick={generateRandomColors}>Random colors for all tags</button>
+          <button className='randomizeColors' onClick={randomPresetColors}>Random pastel color for all tags</button>
           <button className='deselectTag' onClick={deselect}>Deselect</button>
         </div>
+        <button className='closeColorPicker' onClick={openColorPicker}>Close</button>
       </div>
     </div>
   )

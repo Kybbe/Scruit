@@ -82,6 +82,24 @@ export default function Home() {
     todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: todo.name, todo: todo.todo} }))
   }
 
+  async function stressTestBoard() {
+    let boardNames = ["ASDASDASDASDASDASDADS", "asdASDJKL ASDjl ASDljkADSLJK ADS JL", "3", "!,.()/{} [] sdasjkl ,  , m mas mads", "ASJL ASJK LASDLJ KDSJLK AJ KLDSAJLK ADSJLK DASJLKDJLK ASJL KDASLJK DSALJK DASJLKDLJS KAALDSJ LJ KDSAL JKDSA"];
+    boardNames.forEach(name => dispatch({ type: "ADD_BOARD", payload: name }))
+
+    let names = ["ASLDKJASLDKJASLDKLJASDL KASLJ DKL JASL JKDASJKL L JKDALS JDSLJ ALJ KADSAKLJ SKJLJL AKSDL JKSADJL KSL JKLJ KDASLJ KDSA", "ASDJASDJASDKJHASKDJHASKDJHASKDJAKSDJHAKSDJHKAJHSD", "3", "!;?=)(/&%€#{}{}{}}[[][]][|§|[]≈±≈][|§∞$£¥¢‰}≠¿", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
+    let tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff", "HBNKIUYGJKIUHAKSDJALSHALKSDJLASKJDLASKJDALSKD", "AJ KLSDLJASDLJ K DLJSAL JKSADLJ KDSAJLK JLDSAJLK DSA"];
+    let todos = names.map((name, index) => {
+      let newTodo = {
+        name: name,
+        id: uuidv4(),
+        tags: tags.slice(Math.floor(Math.random() * tags.length)),
+      }
+      let randomBoard = Math.floor(Math.random() * boardNames.length);
+      return {name: boardNames[randomBoard], todo: newTodo};
+    })
+    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: todo.name, todo: todo.todo} }))
+  }
+
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
       if(e.target.id === "todoName"){
@@ -143,26 +161,29 @@ export default function Home() {
     <div>
       <h1>Scruit</h1>
         { boards.length > 0 ? (
-          <div>
-            <input id="todoName" type="text" ref={todoName} onKeyDown={handleKeyDown} placeholder="As a [who], I want [what] so that [why]"></input>
-            <input id="tags" type="text" ref={tagsInput} placeholder="Tags, seperated, with, commas"></input>
-            <button onClick={addTodo}>Add Todo</button>
-            <select id="selectBoard" ref={selectedBoard} defaultValue={boards[0]}>
-              {boards.map((board, index) => (
-                <option key={index} value={board}>{board}</option>
-              ))}
-            </select>
+          <>
+            <div style={{display: "flex", gap: "10px", margin: "10px"}}>
+              <input id="todoName" type="text" ref={todoName} onKeyDown={handleKeyDown} placeholder="As a [who], I want [what] so that [why]"></input>
+              <input id="tags" type="text" ref={tagsInput} placeholder="Tags, seperated, with, commas"></input>
+              <select id="selectBoard" ref={selectedBoard} defaultValue={boards[0]}>
+                {boards.map((board, index) => (
+                  <option key={index} value={board}>{board}</option>
+                ))}
+              </select>
+              <button className="addTodo" onClick={addTodo}>Add Todo</button>
+            </div>
             <div>
               <button className="deleteAll" onClick={deleteAll}>Wipe Boards & Todos</button>
               <button className="openColorPicker" onClick={openColorPicker}>Open Color Picker</button>
               <TagColorPicker />
-            </div>
           </div>
+          </>
         ) : (
           <div>
             <p>Add a board down below!</p>
             <button onClick={addKanbanPreset}>Add kanban preset</button>
             <button onClick={addLargeKanbanPreset}>Add large kanban preset</button>
+            <button onClick={stressTestBoard}>Add Stresstest preset</button>
           </div>
         )}
 
