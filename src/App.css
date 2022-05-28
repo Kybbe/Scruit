@@ -2,12 +2,36 @@
   text-align: center;
 }
 
+:root {
+  --background: white;
+  --textColor: black;
+  --borderColor: grey;
+  --offBackground: #F6F8FA;
+  --evenMoreOffBackground: rgb(166, 166, 166);
+  --overDroppable: rgb(214, 228, 233);
+}
+
+.dark-theme {
+  --background: rgb(29, 29, 29);
+  --textColor: white;
+  --borderColor: lightGrey;
+  --offBackground: rgb(48, 48, 48);
+  --evenMoreOffBackground: rgb(129, 129, 129);
+  --overDroppable: rgb(42, 43, 51);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--textColor);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 input {
   width: 50%;
 }
 
 .card, .droppableContainer, .addBoard {
-  border: 1px solid grey;
+  border: 1px solid var(--borderColor);
   border-radius: 5px;
 }
 
@@ -28,7 +52,7 @@ input {
 
 .droppableContainer {
   position: relative;
-  background-color: #F6F8FA;
+  background-color: var(--offBackground);
 }
 
 .droppable {
@@ -40,7 +64,7 @@ input {
 }
 
 .over-droppable {
-  background-color: rgb(214, 228, 233);
+  background-color: var(--overDroppable);
 }
 
 .addBoard {
@@ -52,7 +76,7 @@ input {
 }
 
 .addBoard input {
-  border: 1px solid black;
+  border: 1px solid var(--textColor);
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
@@ -64,8 +88,8 @@ input {
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
-  background-color: black;
-  color: white;
+  background-color: var(--textColor);
+  color: var(--background);
   cursor: pointer;
 }
 
@@ -100,7 +124,7 @@ input {
 }
 
 .boardDeleter svg {
-  fill: black;
+  fill: var(--textColor);
   width: 20px;
   height: 20px;
   transition: fill 0.2s ease;
@@ -127,13 +151,9 @@ input {
   margin: 0;
 }
 
-.draggable:hover .flip-card {
-  background-color: #F6F8FA;
-}
-
 .card {
-  background-color: white;
-  color: black;
+  background-color: var(--background);
+  color: var(--textColor);
   width: 100%;
   min-height: 80px;
   box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
@@ -145,12 +165,27 @@ input {
   word-break: break-word;
 }
 
+.themeSwitcher {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: var(--background);
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
 .deleteAll {
   position: absolute;
   top: 5px;
   right: 5px;
-  background-color: white;
-  border: 1px solid grey;
+  background-color: var(--background);
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
   padding: 5px 10px;
   border-radius: 5px;
   box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
@@ -166,8 +201,9 @@ input {
   position: absolute;
   top: 38px;
   right: 5px;
-  background-color: white;
-  border: 1px solid grey;
+  background-color: var(--background);
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
   padding: 5px 10px;
   border-radius: 5px;
   box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
@@ -175,8 +211,8 @@ input {
   transition: background-color 0.2s ease;
 }
 
-.openColorPicker:hover {
-  background-color: rgb(211, 211, 211);
+.openColorPicker:hover, .themeSwitcher:hover {
+  background-color: var(--evenMoreOffBackground);
 }
 
 /* To hide men when not open */
@@ -186,11 +222,11 @@ input {
 
 /* The menu when its open */
 .menuOpen .menu {
-  border: 1px solid black;
+  border: 1px solid var(--textColor);
   position: absolute;
   top: 20px;
   right: 5px;
-  background-color: white;
+  background-color: var(--background);
   padding: 6px;
   border-radius: 5px;
   display: flex;
@@ -204,8 +240,8 @@ input {
   border: none;
   border-radius: 5px;
   padding: 5px;
-  background-color: black;
-  color: white;
+  background-color: var(--textColor);
+  color: var(--textColor);
   cursor: pointer;
 }
 
@@ -227,6 +263,10 @@ input {
   align-items: center;
 }
 
+.openMenu svg {
+  fill: var(--textColor);
+}
+
 .modal {
   position: fixed;
   top: 50%;
@@ -234,14 +274,14 @@ input {
   width: 50%;
   transform: translate(-50%, -50%);
   padding: 10px;
-  background-color: white;
+  background-color: var(--background);
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 2;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
-  border: 1px solid grey;
+  border: 1px solid var(--borderColor);
 }
 
 .modal > * {
@@ -281,6 +321,7 @@ input {
 
 .tag {
   background-color: lightgrey;
+  color: var(--textColor);
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
@@ -288,6 +329,7 @@ input {
   text-align: center;
   flex-shrink: 0;
   word-break: break-all;
+  flex-shrink: 1;
   max-width: 250px;
 }
 
@@ -310,11 +352,12 @@ input {
 }
 
 .colorPickerMenuRight {
-  background-color: white;
+  background-color: var(--background);
   padding: 10px;
-  border-left: 1px solid grey;
+  border-left: 1px solid var(--borderColor);
   box-shadow: -8px 0px 10px -6px black;
   margin-left: 10px;
+  overflow-x: scroll;
 }
 
 .saveColor {
@@ -332,8 +375,9 @@ input {
 }
 
 .saveColor, .closeColorPicker, .deselectTag, .randomizeColors, .addTodo {
-  background-color: white;
-  border: 1px solid grey;
+  background-color: var(--background);
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
   border-radius: 5px;
   cursor: pointer;
   padding: 5px;
@@ -353,7 +397,7 @@ input {
 }
 
 .closeColorPicker:hover, .saveColor:hover, .deselectTag:hover, .randomizeColors:hover, .addTodo:hover {
-  background-color: rgb(232, 232, 232);
+  background-color: var(--evenMoreOffBackground);
 }
 
 .color-picker-tags {
@@ -368,6 +412,8 @@ input {
   border-radius: 5px;
   box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
   cursor: pointer;
+  background-color: lightgrey;
+  color: var(--textColor);
 }
 
 .color-picker-tag.selected {

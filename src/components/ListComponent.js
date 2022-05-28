@@ -11,14 +11,26 @@ export default function ListComponent({board, index}) {
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
   const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0)
   const listHeader = useRef(null)
 
   useEffect(() => {
-    setHeight((listHeader.current.clientHeight + 10) + "px")
-  })
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setHeight((listHeader.current.clientHeight + 10) + "px")
+      setWidth(window.innerWidth)
+    }
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
 
   function collapseDroppable() {
-    if(document.body.clientWidth <= 500) {
+    if(width <= 500) {
       if(collapsed) {
         setCollapsed(false)
       } else {
@@ -29,7 +41,7 @@ export default function ListComponent({board, index}) {
   
   return (
     <div className='droppableContainer'>
-      <div ref={listHeader} onClick={ collapseDroppable }>
+      <div ref={listHeader} onClick={ collapseDroppable } style={width >= 501 ? {maxWidth: "280px"} : undefined}>
         <p className='boardCounter'>{todosInBoard.length}</p>
         <h2 className='boardTitle'>{board}</h2>
         <button 

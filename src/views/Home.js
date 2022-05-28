@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext } from 'react-beautiful-dnd';
 import { Droppable } from 'react-beautiful-dnd';
@@ -111,6 +111,29 @@ export default function Home() {
     }
   }
 
+  function switchTheme() {
+    document.body.classList.toggle("dark-theme")
+    let previousTheme = localStorage.getItem("theme");
+    if(previousTheme === "dark"){
+      localStorage.setItem("theme", "light")
+    } else {
+      localStorage.setItem("theme", "dark")
+    }
+  }
+  
+  useEffect(() => {
+    let theme = localStorage.getItem("theme")
+    if(theme === "dark") {
+      document.body.classList.add("dark-theme")
+    } else if(theme !== "light") {
+      const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if(userPrefersDark) {
+        document.body.classList.add("dark-theme")
+      }
+    }
+  })
+
   function deleteAll() {
     dispatch({ type: "DELETE_ALL" });
   }
@@ -160,6 +183,7 @@ export default function Home() {
   return (
     <div>
       <h1>Scruit</h1>
+      <button className="themeSwitcher" onClick={switchTheme}>Theme change</button>
         { boards.length > 0 ? (
           <>
             <div style={{display: "flex", gap: "10px", margin: "10px"}}>

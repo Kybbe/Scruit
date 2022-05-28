@@ -5,6 +5,7 @@ export default function UniversalModal() {
 
   const dispatch = useDispatch();
   const newTodoName = useRef("");
+  const todoId = useRef("")
   const newTags = useRef("");
 
   const currentEditTodo = useSelector(state => state.currentEditTodo);
@@ -12,6 +13,7 @@ export default function UniversalModal() {
   useEffect(() => {
     if (currentEditTodo) {
       newTodoName.current.value = currentEditTodo.name;
+      todoId.current.value = currentEditTodo.id
     }
   }, [currentEditTodo])
 
@@ -31,6 +33,7 @@ export default function UniversalModal() {
     if (name) {
       dispatch({ type: "UPDATE_TODO", payload: {id: id, name: name, board: board, tags: tags} });
       newTodoName.current.value = "";
+      todoId.current.value = "";
       document.getElementsByClassName('modal')[0].classList.toggle('hidden');
       document.getElementsByClassName('modalBackdrop')[0].classList.toggle('hidden');
     } else {
@@ -55,9 +58,9 @@ export default function UniversalModal() {
         {currentEditTodo ? (
           <>
             <h2>Edit Todo</h2>
-            <input className="newTodoName" type="text" ref={newTodoName} onKeyDown={handleKeyDown} defaultValue={currentEditTodo.name}></input>
-            <input className='newTodoId' disabled value={currentEditTodo.id}></input>
-            <input className='newTags' ref={newTags}></input>
+            <input className="newTodoName" type="text" ref={newTodoName} onKeyDown={handleKeyDown}></input>
+            <input className='newTodoId' ref={todoId} disabled></input>
+            <input className='newTags' ref={newTags} onKeyDown={handleKeyDown}></input>
             <button onClick={editTodo}>Save</button>
             <button className='closeModal' onClick={closeModal}>X</button>
           </>

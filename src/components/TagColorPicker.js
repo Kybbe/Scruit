@@ -46,8 +46,18 @@ export default function TagColorPicker() {
   });
 
   useEffect(() => {
-    setWidth((menu.current.clientWidth) + "px")
-  })
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setWidth((menu.current.clientWidth + 10) + "px")
+    }
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
 
   useEffect(() => {
     if(selectedTag !== ""){
@@ -90,6 +100,7 @@ export default function TagColorPicker() {
 
   function randomPresetColors(){
     let randomColors = [];
+    
     tags.forEach(tag => {
       randomColors.push({tag: tag, color: presetColors[Math.floor(Math.random() * (presetColors.length - 1))]});
     });
