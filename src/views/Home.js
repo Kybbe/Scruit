@@ -6,6 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import ListComponent from "../components/ListComponent";
 import UniversalModal from "../components/UniversalModal";
 import TagColorPicker from "../components/TagColorPicker";
+import Adder from "../components/Adder";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -184,6 +185,7 @@ export default function Home() {
     <div>
       <h1>Scruit</h1>
       <button className="themeSwitcher" onClick={switchTheme}>Theme change</button>
+      <Adder />
         { boards.length > 0 ? (
           <>
             <div style={{display: "flex", gap: "10px", margin: "10px"}}>

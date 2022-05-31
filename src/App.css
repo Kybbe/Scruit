@@ -46,8 +46,8 @@ input {
 
 .boards {
   display: flex;
-  overflow: scroll;
   min-height: 80vh;
+  overflow-x: scroll;
 }
 
 .droppableContainer {
@@ -241,7 +241,7 @@ input {
   border-radius: 5px;
   padding: 5px;
   background-color: var(--textColor);
-  color: var(--textColor);
+  color: var(--background);
   cursor: pointer;
 }
 
