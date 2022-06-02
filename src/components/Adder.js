@@ -12,6 +12,8 @@ export default function Adder() {
   const boardName = useRef("")
   const selectedBoard = useRef(0)
   
+  const [previewTags, setPreviewTags] = useState([]);
+  
   const [open, setOpen] = useState(false);
   
   const [greyOutTodo, setGreyOutTodo] = useState(false);
@@ -60,6 +62,17 @@ export default function Adder() {
     }
   }
 
+  function updatePreviewTags() {
+    let tagsText = tagsInput.current.value;
+    let tags = tagsText.split(", ");
+    tags.forEach(tag => {
+      if(tag === "") {
+        tags.splice(tags.indexOf(tag), 1);
+      }
+    });
+    setPreviewTags(tags);
+  }
+
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
       if(e.target.id === "todoName"){
@@ -83,13 +96,27 @@ export default function Adder() {
         </div>
         <div className="adderAddTodo">
           <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} id="todoName" type="text" ref={todoName} onKeyDown={handleKeyDown} placeholder="As a [who], I want [what] so that [why]"></input>
-          <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} id="tags" type="text" ref={tagsInput} placeholder="Tags, seperated, with, commas"></input>
+          <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} id="tags" type="text" ref={tagsInput} onChange={updatePreviewTags} placeholder="Tags, seperated, with, commas"></input>
+          <div className="previewTags" style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}}>
+            {previewTags.length > 0 ? 
+              previewTags.map((tag, index) => {
+                //remove spaces from tag
+                let tagClass = tag.replace(/\s/g, '');
+                return (
+                  <div className={"tag " + tagClass.toLowerCase()} key={index}>
+                    {tag}
+                  </div>
+                )
+              })
+              : ""
+            }
+          </div>
           <select disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} ref={selectedBoard} defaultValue={boards[0]}>
             {boards.map((board, index) => (
               <option key={index} value={board}>{board}</option>
             ))}
           </select>
-          <button className="addTodo" onClick={addTodo}>Add Todo</button>
+          <button disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey", cursor: "default"} : {}} className="addTodo" onClick={addTodo}>Add Todo</button>
         </div>
       </div>
 
@@ -100,12 +127,13 @@ export default function Adder() {
           position: fixed;
           top: 4.5em;
           left: 10px;
-          background-color: white;
+          background-color: var(--background);
           border-radius: 10px;
-          box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+          box-shadow: 0px 0px 16px rgba(0,0,0,0.3);
           z-index: 2;
           padding-top: 10px;
           min-width: 22em;
+          max-width: 40vw;
         }
 
         .adderBtn h1 {
@@ -130,8 +158,8 @@ export default function Adder() {
         .adderContent button {
           width: calc(100% - 20px);
           margin: 10px;
-          background-color: black;
-          color: white;
+          background-color: var(--textColor);
+          color: var(--background);
           border-radius: 5px;
           padding: 10px;
           font-size: 1.2em;
@@ -144,7 +172,7 @@ export default function Adder() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          border-bottom: 1px solid grey;
+          border-bottom: 1px solid var(--borderColor);
         }
 
         .adderAddTodo {
@@ -158,9 +186,21 @@ export default function Adder() {
           width: 100%;
           box-sizing: border-box;
           border: none;
-          border-bottom: 1px solid lightgrey;
+          border-bottom: 1px solid var(--borderColor);
           padding: 10px;
           font-size: 1.2em;
+        }
+
+        .previewTags {
+          display: flex;
+          border-bottom: 1px solid var(--borderColor);
+          min-width: 100%;
+          overflow-x: scroll;
+        }
+
+        .previewTags * {
+          flex-shrink: 0;
+          height: 100%;
         }
       `}</style>
     </div>
