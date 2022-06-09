@@ -36,7 +36,7 @@ export default function TagColorPicker() {
   ];
   // boards = [[{todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}, {todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}]]
   //collpase all todos into one array
-  let tags = [];
+  var tags = [];
   boards.forEach(board => {
     board.forEach(todo => {
       todo.tags.forEach(tag => {
@@ -69,13 +69,12 @@ export default function TagColorPicker() {
 
   tags = [...new Set(tags)];
   tags = tags.sort();
-  //tags = tags.map(tag => tag.toLowerCase());
 
-  let tagsAsObject = [];
+  var tagsAsObject = [];
   tags.forEach(tag => {
     tagsAsObject.push({
       tag: tag,
-      color: ""
+      color: "",
     })
   });
 
@@ -131,37 +130,54 @@ export default function TagColorPicker() {
     setSelectedTag("");
   }
 
-  var element = document.createElement('style'),
-	sheet;
-
-  // Append style element to head
-  document.head.appendChild(element);
-
-  // Reference to the stylesheet
-  sheet = element.sheet;
-
-  // Add CSS rules for all tags to have background-color set to the color of the tag
-  tagsAsObject.forEach(tag => {
-    let textStyle = "";
-    var textColor = tag.color.substring(1);      // strip #
-    var rgb = parseInt(textColor, 16);   // convert rrggbb to decimal
-    var r = (rgb >> 16) & 0xff;  // extract red
-    var g = (rgb >>  8) & 0xff;  // extract green
-    var b = (rgb >>  0) & 0xff;  // extract blue
-    
-    var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-    
-    if (luma > 90) {
-      textStyle = "#000"
-    } else if(luma === 0){
-      textStyle = "#000"
+  function addCss() {
+    var sheet;
+    if(document.getElementsByClassName("tag-color-picker")[0]){
+      sheet = document.getElementsByClassName("tag-color-picker")[0].sheet;
     } else {
-      textStyle = "#fff"
+      var element = document.createElement('style');
+      
+      element.classList.add('tag-color-picker');
+
+      // Append style element to head
+      document.head.appendChild(element);
+  
+      // Reference to the stylesheet
+      sheet = element.sheet;
     }
-    //remove spaces from tag.tag
-    let tagName = tag.tag.replace(/\s/g, '');
-    sheet.insertRule(`.${tagName.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`, sheet.cssRules.length);
-  });
+
+    //empty the stylesheet before adding new styles
+    for (var i = 0; i < sheet.cssRules.length; i++) {
+      sheet.deleteRule(i);
+    }
+
+    // Add CSS rules for all tags to have background-color set to the color of the tag
+    tagsAsObject.forEach(tag => {
+      let textStyle = "";
+      var textColor = tag.color.substring(1);      // strip #
+      var rgb = parseInt(textColor, 16);   // convert rrggbb to decimal
+      var r = (rgb >> 16) & 0xff;  // extract red
+      var g = (rgb >>  8) & 0xff;  // extract green
+      var b = (rgb >>  0) & 0xff;  // extract blue
+      
+      var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+      
+      if (luma > 90) {
+        textStyle = "#000"
+      } else if(luma === 0){
+        textStyle = "#000"
+      } else {
+        textStyle = "#fff"
+      }
+      //remove spaces from tag.tag
+      let tagName = tag.tag.replace(/\s/g, '');
+      sheet.insertRule(`.${tagName.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`, sheet.cssRules.length);
+    });
+  }
+
+  useEffect(() => {
+    addCss();
+  }, [tags]);
 
   function openColorPicker() {
     menu.current.classList.toggle("openedColorPicker");
@@ -172,7 +188,7 @@ export default function TagColorPicker() {
   return (
     <div className='colorPickerMenu' ref={menu} style={{transform: `translateX(${width})`}}>
       <div className='colorPickerMenuLeft' ref={rightPane}>
-        <SketchPicker color={color} presetColors={presetColors} onChange={color => {
+        <SketchPicker color={color} presetColors={presetColors} disableAlpha onChange={color => {
           setColor(color.hex);
         }} />
         <button onClick={(e)=> {onComplete(); e.stopPropagation()}} className="saveColor">Save</button>
@@ -207,8 +223,10 @@ export default function TagColorPicker() {
             }
             return (
               <div key={index} onClick={(e)=>{selectTag(tag); e.stopPropagation(); }} 
-              className={`color-picker-tag ${selectedTag === tag ? "selected" : ""}`}
-              style={selectedTag === tag ? {color: thisTagsTextColor, backgroundColor: color} : {color: thisTagsTextColor, backgroundColor: thisTagsColor}}>
+                className={`color-picker-tag ${selectedTag === tag ? "selected" : ""}`}
+                style={selectedTag === tag ? {color: thisTagsTextColor, backgroundColor: color} : 
+                {color: thisTagsTextColor, backgroundColor: thisTagsColor}}
+              >
                 {tag}
               </div>
             )

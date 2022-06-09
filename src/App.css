@@ -26,8 +26,28 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+.home {
+  padding-top: 50px;
+}
+
+.home h1 {
+  font-size: 2.5em;
+  margin: 5px;
+}
+
 input {
   width: 50%;
+}
+
+input, select {
+  background-color: var(--offBackground);
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
+}
+
+::placeholder, option { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--textColor);
+  opacity: 1; /* Firefox */
 }
 
 .card, .droppableContainer, .addBoard {
@@ -165,10 +185,19 @@ input {
   word-break: break-word;
 }
 
+.dueDateAndTime {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 5px 10px 10px 10px;
+}
+
+.dueDateAndTime p {
+  margin: 0;
+}
+
 .themeSwitcher {
-  position: absolute;
-  top: 5px;
-  left: 5px;
   background-color: var(--background);
   color: var(--textColor);
   border: 1px solid var(--borderColor);
@@ -180,9 +209,6 @@ input {
 }
 
 .deleteAll {
-  position: absolute;
-  top: 5px;
-  right: 5px;
   background-color: var(--background);
   color: var(--textColor);
   border: 1px solid var(--borderColor);
@@ -198,9 +224,6 @@ input {
 }
 
 .openColorPicker {
-  position: absolute;
-  top: 38px;
-  right: 5px;
   background-color: var(--background);
   color: var(--textColor);
   border: 1px solid var(--borderColor);
@@ -374,7 +397,7 @@ input {
   transform: translateX(0px) !important;
 }
 
-.saveColor, .closeColorPicker, .deselectTag, .randomizeColors, .addTodo {
+.saveColor, .closeColorPicker, .deselectTag, .randomizeColors, .addTodo, .addBoardBtn {
   background-color: var(--background);
   color: var(--textColor);
   border: 1px solid var(--borderColor);
@@ -396,7 +419,7 @@ input {
   margin-top: 40px;
 }
 
-.closeColorPicker:hover, .saveColor:hover, .deselectTag:hover, .randomizeColors:hover, .addTodo:hover {
+.closeColorPicker:hover, .saveColor:hover, .deselectTag:hover, .randomizeColors:hover, .addTodo:hover, .addBoardBtn:hover {
   background-color: var(--evenMoreOffBackground);
 }
 
@@ -418,6 +441,139 @@ input {
 
 .color-picker-tag.selected {
   box-shadow: 4px 4px 8px rgba(128, 128, 128, 0.5);
+}
+
+.navbar {
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  background-color: var(--offBackground);
+  box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.2);
+  z-index: 1;
+}
+
+.navbarLeft, .navbarRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.checkmark {
+  background: transparent;
+  border: none;
+
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.checkmark svg {
+  width: 30px;
+  height: 30px;
+}
+
+.adderContent {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 55px;
+  left: 10px;
+  background-color: var(--background);
+  border-radius: 10px;
+  box-shadow: 0px 0px 16px rgba(0,0,0,0.3);
+  z-index: 2;
+  min-width: 22em;
+  max-width: 40vw;
+}
+
+.adderBtn h1 {
+  font-size: 2em;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+  color: var(--textColor);
+  line-height: 0.85em;
+  margin: 0;
+}
+
+.adderBtn {
+  cursor: pointer;
+  z-index: 2;
+  height: 2em;
+  width: 2em;
+  line-height: 1em;
+  text-align: center;
+}
+
+.adderContent button {
+  width: calc(100% - 20px);
+  margin: 10px;
+  background-color: var(--textColor);
+  color: var(--background);
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.2em;
+  border: none;
+  box-sizing: border-box;
+}
+
+.adderAddTodo > div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.adderDate, .adderTime {
+  width: 100%
+}
+
+.adderAddBoard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.adderAddBoard input {
+  border-radius: 10px 10px 0 0;
+} 
+
+.adderAddTodo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.adderAddTodo input, .adderAddBoard input, .adderAddTodo select {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid var(--borderColor);
+  padding: 10px;
+  font-size: 1.2em;
+}
+
+.previewTags {
+  display: flex;
+  border-bottom: 1px solid var(--borderColor);
+  min-width: 100%;
+  overflow-x: scroll;
+}
+
+.previewTags * {
+  flex-shrink: 0;
+  height: 100%;
 }
 
 @media (max-width: 500px) {

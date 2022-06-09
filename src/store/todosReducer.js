@@ -1,7 +1,8 @@
 const initialState = {
   todos: {},
   currentEditTodo: {},
-  colors: []
+  colors: [],
+  automatedDoneBoard: ""
 };
 
 const MenuReducer = (state = initialState, action) => {
@@ -33,11 +34,27 @@ const MenuReducer = (state = initialState, action) => {
         ...state,
         todos: newTodosToRemoveState
       }
+    case 'COMPLETE_TODO':
+      let todosInBoardToComplete = state.todos[action.payload.board];
+      let newTodosToComplete = todosInBoardToComplete.map(todo => {
+        if(todo.id === action.payload.id) {
+          todo.completed = !todo.completed;
+        }
+        return todo;
+      });
+
+      return {
+        ...state,
+        todos: {
+          ...state.todos,
+          [action.payload.board]: newTodosToComplete
+        }
+      }
     case 'UPDATE_TODO':
       let todosInBoardToUpdate = state.todos[action.payload.board];
       let newTodosToUpdate = todosInBoardToUpdate.map(todo => {
         if(todo.id === action.payload.id){
-          return {name: action.payload.name, id: todo.id, tags: action.payload.tags};
+          return {name: action.payload.name, id: todo.id, tags: action.payload.tags, date: action.payload.date, time: action.payload.time};
         }
         return todo;
       });
@@ -48,6 +65,11 @@ const MenuReducer = (state = initialState, action) => {
           ...state.todos,
           [action.payload.board]: newTodosToUpdate
         }
+      }
+    case 'SET_AUTOMATED_DONE_BOARD':
+      return {
+        ...state,
+        automatedDoneBoard: action.payload
       }
     case 'UPDATE_TODOS':
       return {
