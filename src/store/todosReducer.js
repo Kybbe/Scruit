@@ -102,7 +102,8 @@ const MenuReducer = (state = initialState, action) => {
         ...state,
         todos: {},
         currentEditTodo: {},
-        colors: []
+        colors: [],
+        automatedDoneBoard: ""
       }
     case 'SET_COLORS':
       return {
