@@ -162,7 +162,7 @@ export default function Navbar() {
             <button className="presetBtn" onClick={stressTestBoard}>Add Stresstest preset</button>
           </div>
           <div className="navbarRightOpener">
-            <button className="nvabarOpener" onClick={openRightNavbar}>⇩</button>
+            <button className="navbarOpener" onClick={openRightNavbar}>⇩</button>
           </div>
         </>
       ) : "" }
