@@ -68,7 +68,6 @@ export default function Home() {
 
   return (
     <div className="home">
-      <h1>Scruit</h1>
       <Navbar />
 
       <DragDropContext onDragEnd={onDragEnd}>
