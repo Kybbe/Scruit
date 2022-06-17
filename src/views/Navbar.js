@@ -57,6 +57,11 @@ export default function Navbar() {
     document.getElementsByClassName("colorPickerMenu")[0].classList.toggle("openedColorPicker");
   }
 
+  function openRightNavbar() {
+    document.getElementsByClassName("navbarRight")[0].classList.toggle("openedRightNavbar");
+    document.getElementsByClassName("navbarOpener")[0].classList.toggle("openedRightNavbar");
+  }
+
   //create a random date in YYYY-MM-DD format
   function randomDate() {
     var date;
@@ -150,26 +155,36 @@ export default function Navbar() {
       </div>
 
       { boards.length <= 0 ? (
-        <div className="navbarRight">
-          <button className="presetBtn" onClick={addKanbanPreset}>Add kanban preset</button>
-          <button className="presetBtn" onClick={addLargeKanbanPreset}>Add large kanban preset</button>
-          <button className="presetBtn" onClick={stressTestBoard}>Add Stresstest preset</button>
-        </div>
+        <>
+          <div className="navbarRight">
+            <button className="presetBtn" onClick={addKanbanPreset}>Add kanban preset</button>
+            <button className="presetBtn" onClick={addLargeKanbanPreset}>Add large kanban preset</button>
+            <button className="presetBtn" onClick={stressTestBoard}>Add Stresstest preset</button>
+          </div>
+          <div className="navbarRightOpener">
+            <button className="nvabarOpener" onClick={openRightNavbar}>⇩</button>
+          </div>
+        </>
       ) : "" }
 
       { boards.length > 0 ? (
-        <div className="navbarRight">
-          <h3>When todos are completed, move too: </h3>
-          <select ref={doneBoardSelect} onChange={setAutomatedDoneBoard}> 
-            <option value="">Select a board</option>
-            {boards.map(board => (
-              <option key={board} value={board}>{board}</option>
-            ))}
-          </select>
-          <button className="deleteAll" onClick={deleteAll}>Wipe Boards & Todos</button>
-          <button className="openColorPicker" onClick={openColorPicker}>Open Color Picker</button>
-          <TagColorPicker />
-        </div>
+        <>
+          <div className="navbarRight">
+            <h3>"Done" board: </h3>
+            <select ref={doneBoardSelect} onChange={setAutomatedDoneBoard}> 
+              <option value="">Select a board</option>
+              {boards.map(board => (
+                <option key={board} value={board}>{board}</option>
+              ))}
+            </select>
+            <button className="deleteAll" onClick={deleteAll}>Wipe Boards & Todos</button>
+            <button className="openColorPicker" onClick={openColorPicker}>Open Color Picker</button>
+            <TagColorPicker />
+          </div>
+          <div className="navbarRightOpener">
+            <button className="navbarOpener" onClick={openRightNavbar}>⇩</button>
+          </div>
+        </>
       ) : ""}
     </div>
   );

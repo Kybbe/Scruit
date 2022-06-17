@@ -581,6 +581,10 @@ input, select {
   height: 100%;
 }
 
+.navbarRightOpener {
+  display: none;
+}
+
 @media (max-width: 500px) {
   .boards {
     flex-direction: column;
@@ -604,5 +608,51 @@ input, select {
     width: 90vw;
     max-width: 90vw;
     min-width: 90vw;
+  }
+
+  .navbarRight {
+    visibility: hidden;
+    position: absolute;
+    top: 50px;
+  }
+
+  .navbarRight > h3 {
+    margin: 3px;
+  }
+  
+  .navbarRight.openedRightNavbar {
+    visibility: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+    right: 0;
+    background-color: var(--background);
+    border-radius: 10px;
+    box-shadow: 0px 0px 16px rgba(0,0,0,0.3);
+    z-index: 2;
+
+    background-color: var(--background);
+  }
+
+  .navbarRightOpener {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbarOpener {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.2em;
+    transform: rotate(0deg);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .navbarOpener.openedRightNavbar {
+    transform: rotate(180deg);
   }
 }
