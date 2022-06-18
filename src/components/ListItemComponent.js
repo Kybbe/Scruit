@@ -97,7 +97,7 @@ export default function ListItemComponent({todo, index, board}) {
               {todo.tags.length > 0 ? 
                 todo.tags.map((tag, index) => {
                   //remove spaces from tag
-                  let tagClass = tag.replace(/\s/g, '');
+                  let tagClass = tag.replace(/[^a-zA-Z0-9]/g, '')
                   return (
                     <div className={"tag " + tagClass.toLowerCase()} key={index}>
                       {tag}

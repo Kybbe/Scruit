@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import TagColorPicker from "../components/TagColorPicker";
 import Adder from "../components/Adder";
+import TagColorPicker from "../components/TagColorPicker";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -130,8 +130,8 @@ export default function Navbar() {
     boardNames.forEach(name => dispatch({ type: "ADD_BOARD", payload: name }))
 
     let names = ["ASLDKJASLDKJASLDKLJASDL KASLJ DKL JASL JKDASJKL L JKDALS JDSLJ ALJ KADSAKLJ SKJLJL AKSDL JKSADJL KSL JKLJ KDASLJ KDSA", "ASDJASDJASDKJHASKDJHASKDJHASKDJAKSDJHAKSDJHKAJHSD", "3", "!;?=)(/&%€#{}{}{}}[[][]][|§|[]≈±≈][|§∞$£¥¢‰}≠¿", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
-    let tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff", "HBNKIUYGJKIUHAKSDJALSHALKSDJLASKJDLASKJDALSKD", "AJ KLSDLJASDLJ K DLJSAL JKSADLJ KDSAJLK JLDSAJLK DSA"];
-    let todos = names.map((name, index) => {
+    let tags = ["Coffee", "Code", "Game", "Form", "Register", "NKO)(/&%TYUIO}{Ü][|˜Ü{üº¬ºﬂ·", ")J!)(F2e9ukf29ne9wef827J/KU)IJK=AS?DP", "Stuff", "HBNKIUYGJKIUHAKSDJALSHALKSDJLASKJDLASKJDALSKD", "AJ KLSDLJASDLJ K DLJSAL JKSADLJ KDSAJLK JLDSAJLK DSA"];
+    let todos = names.map(name => {
       let trueOrFalse = Math.random() > 0.5
       let newTodo = {
         name: name,

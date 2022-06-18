@@ -170,7 +170,7 @@ export default function TagColorPicker() {
         textStyle = "#fff"
       }
       //remove spaces from tag.tag
-      let tagName = tag.tag.replace(/\s/g, '');
+      let tagName = tag.tag.replace(/[^a-zA-Z0-9]/g, '')
       sheet.insertRule(`.${tagName.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`, sheet.cssRules.length);
     });
   }

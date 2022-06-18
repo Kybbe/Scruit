@@ -44,6 +44,20 @@ export default function Adder() {
 
     // make tags a array of strings split by ", "
     tags = tags.split(", ");
+    if(tags.length > 0 && tags[tags.length - 1] === "") {
+      tags.pop(); // remove last tag if it is empty
+    }
+    tags.forEach(tag => {
+      if(tag === "") {
+        alert("Please have atleast one letter or number in each tag");
+        return;
+      }
+      // if first charachter in tag is a number, remove it
+      if(/^\d/.test(tag)) {
+        tag = tag.substring(1);
+      }
+      
+    });
     if(tags[0] === "") { tags = []; }
     if (name) {
       //find board by board.id, and make todo.order equal to the length of that board's todos array
@@ -108,7 +122,7 @@ export default function Adder() {
             {previewTags.length > 0 ? 
               previewTags.map((tag, index) => {
                 //remove spaces from tag
-                let tagClass = tag.replace(/\s/g, '');
+                let tagClass = tag.replace(/[^a-zA-Z0-9]/g, '')
                 return (
                     <div className={"tag " + tagClass.toLowerCase()} key={index}>
                       {tag}
