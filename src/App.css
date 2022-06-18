@@ -518,6 +518,17 @@ input, select {
   text-align: center;
 }
 
+.adderDateAndTime {
+  background-color: var(--offBackground);
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.dueTextAdder {
+  padding-left: 7px;
+  padding-right: 7px;
+  margin: 0;
+}
+
 .adderContent button {
   width: calc(100% - 20px);
   margin: 10px;
@@ -538,7 +549,11 @@ input, select {
 }
 
 .adderDate, .adderTime {
-  width: 100%
+  width: 100%;
+}
+
+.adderDate input, .adderTime input {
+  border-bottom: 0px !important;
 }
 
 .adderAddBoard {
@@ -546,7 +561,6 @@ input, select {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid var(--borderColor);
 }
 
 .adderAddBoard input {

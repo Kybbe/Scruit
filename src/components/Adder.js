@@ -119,6 +119,7 @@ export default function Adder() {
             }
           </div>
           <div className="adderDateAndTime">
+            <p className="dueTextAdder">Due: </p>
             <div className="adderDate">
               <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} ref={dateInput} type="date" placeholder="Date"></input>
             </div>
