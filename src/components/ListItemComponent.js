@@ -49,7 +49,13 @@ export default function ListItemComponent({todo, index, board}) {
     let currentDate = new Date();
     currentDate = currentDate.getTime();
 
-    let todoDate = new Date(date + " " + time);
+    var todoDate = "";
+
+    if(time !== "") {
+      todoDate = new Date(date + " " + time);
+    } else {
+      todoDate = new Date(date + " 00:00");
+    }
     todoDate = todoDate.getTime();
 
     if (todoDate < currentDate) {

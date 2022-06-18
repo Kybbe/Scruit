@@ -118,13 +118,13 @@ export default function Adder() {
               : ""
             }
           </div>
-          <div className="adderDateAndTime">
+          <div className="adderDateAndTime" style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}}>
             <p className="dueTextAdder">Due: </p>
             <div className="adderDate">
-              <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} ref={dateInput} type="date" placeholder="Date"></input>
+              <input disabled={greyOutTodo} style={greyOutTodo ? {backgroundColor: "lightgrey"} : {}} ref={dateInput} type="date" placeholder="Date"></input>
             </div>
             <div className="adderTime">
-              <input disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} ref={timeInput} type="time" placeholder="Time"></input>
+              <input disabled={greyOutTodo} style={greyOutTodo ? {backgroundColor: "lightgrey"} : {}} ref={timeInput} type="time" placeholder="Time"></input>
             </div>
           </div>
           <select disabled={greyOutTodo} style={greyOutTodo ? {opacity: "0.3", backgroundColor: "lightgrey"} : {}} ref={selectedBoard} defaultValue={boards[0]}>
