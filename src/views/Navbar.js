@@ -88,7 +88,7 @@ export default function Navbar() {
 
     
     let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep"];
-    let todos = names.map((name, index) => {
+    let todos = names.map(name => {
       let trueOrFalse = Math.random() > 0.5
       let newTodo = {
         name: name,
@@ -109,7 +109,7 @@ export default function Navbar() {
 
     let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
     let tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff"];
-    let todos = names.map((name, index) => {
+    let todos = names.map(name => {
       let trueOrFalse = Math.random() > 0.5
       let newTodo = {
         name: name,
