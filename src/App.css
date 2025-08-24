@@ -1,673 +1,699 @@
 * {
-  text-align: center;
+	text-align: center;
 }
 
 :root {
-  --background: white;
-  --textColor: black;
-  --borderColor: grey;
-  --offBackground: #F6F8FA;
-  --evenMoreOffBackground: rgb(166, 166, 166);
-  --overDroppable: rgb(214, 228, 233);
+	--background: white;
+	--textColor: black;
+	--borderColor: grey;
+	--offBackground: #f6f8fa;
+	--evenMoreOffBackground: rgb(166, 166, 166);
+	--overDroppable: rgb(214, 228, 233);
 }
 
 .dark-theme {
-  --background: rgb(29, 29, 29);
-  --textColor: white;
-  --borderColor: lightGrey;
-  --offBackground: rgb(48, 48, 48);
-  --evenMoreOffBackground: rgb(129, 129, 129);
-  --overDroppable: rgb(42, 43, 51);
+	--background: rgb(29, 29, 29);
+	--textColor: white;
+	--borderColor: lightGrey;
+	--offBackground: rgb(48, 48, 48);
+	--evenMoreOffBackground: rgb(129, 129, 129);
+	--overDroppable: rgb(42, 43, 51);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--textColor);
-  transition: background-color 0.5s ease, color 0.5s ease;
+	background-color: var(--background);
+	color: var(--textColor);
+	transition:
+		background-color 0.5s ease,
+		color 0.5s ease;
 }
 
 .home {
-  padding-top: 50px;
+	padding-top: 50px;
 }
 
 .home h1 {
-  font-size: 2.5em;
-  line-height: 1em;
-  margin: 5px;
+	font-size: 2.5em;
+	line-height: 1em;
+	margin: 5px;
 }
 
 input {
-  width: 50%;
+	width: 50%;
 }
 
-input, select {
-  background-color: var(--offBackground);
-  color: var(--textColor);
-  border: 1px solid var(--borderColor);
+input,
+select {
+	background-color: var(--offBackground);
+	color: var(--textColor);
+	border: 1px solid var(--borderColor);
 }
 
-::placeholder, option { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--textColor);
-  opacity: 1; /* Firefox */
+::placeholder,
+option {
+	/* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: var(--textColor);
+	opacity: 1; /* Firefox */
 }
 
-.card, .droppableContainer, .addBoard {
-  border: 1px solid var(--borderColor);
-  border-radius: 5px;
+.card,
+.droppableContainer,
+.addBoard {
+	border: 1px solid var(--borderColor);
+	border-radius: 5px;
 }
 
-.draggable, .droppableContainer, .addBoard {
-  border-radius: 5px;
-  margin: 5px;
+.draggable,
+.droppableContainer,
+.addBoard {
+	border-radius: 5px;
+	margin: 5px;
 }
 
 .draggable {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 .boards {
-  display: flex;
-  min-height: calc(100vh - 50px);
+	display: flex;
+	min-height: calc(100vh - 50px);
 }
 
 .droppableContainer {
-  position: relative;
-  background-color: var(--offBackground);
+	position: relative;
+	background-color: var(--offBackground);
 }
 
 .droppable {
-  position: relative;
-  width: 280px;
-  border-radius: 5px;
-  padding-top: 5px;
-  flex-shrink: 0;
+	position: relative;
+	width: 280px;
+	border-radius: 5px;
+	padding-top: 5px;
+	flex-shrink: 0;
 }
 
 .over-droppable {
-  background-color: var(--overDroppable);
+	background-color: var(--overDroppable);
 }
 
 .addBoard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
 }
 
 .addBoard input {
-  border: 1px solid var(--textColor);
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
-  margin-bottom: 0;
+	border: 1px solid var(--textColor);
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	margin-bottom: 0;
 }
 
 .addBoard button {
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
-  background-color: var(--textColor);
-  color: var(--background);
-  cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	background-color: var(--textColor);
+	color: var(--background);
+	cursor: pointer;
 }
 
 .addBoard > * {
-  box-sizing: border-box;
-  width: 95%;
-  margin: 5px;
+	box-sizing: border-box;
+	width: 95%;
+	margin: 5px;
 }
 
 #selectBoard {
-  max-width: 30vw;
+	max-width: 30vw;
 }
 
 .trash {
-  background-color: lightcoral;
-  background-image: url(./trashcan.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 50px;
-  width: 282px;
-  min-height: 122px;
-  margin: 0;
+	background-color: lightcoral;
+	background-image: url(./trashcan.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 50px;
+	width: 282px;
+	min-height: 122px;
+	margin: 0;
 }
 
 .boardDeleter {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
 }
 
 .boardDeleter svg {
-  fill: var(--textColor);
-  width: 20px;
-  height: 20px;
-  transition: fill 0.2s ease;
+	fill: var(--textColor);
+	width: 20px;
+	height: 20px;
+	transition: fill 0.2s ease;
 }
 
 .boardDeleter:hover svg {
-  fill: red;
+	fill: red;
 }
 
 .boardTitle {
-  margin: 5px 35px 0px 35px;
-  word-break: break-word;
+	margin: 5px 35px 0px 35px;
+	word-break: break-word;
 }
 
 .boardCounter {
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  background-color: rgba(211, 211, 211, 0.4);
-  width: 1.2em;
-  height: 1.2em;
-  border-radius: 50%;
-  padding: 5px;
-  margin: 0;
+	position: absolute;
+	top: 2px;
+	left: 5px;
+	background-color: rgba(211, 211, 211, 0.4);
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 50%;
+	padding: 5px;
+	margin: 0;
 }
 
 .card {
-  background-color: var(--background);
-  color: var(--textColor);
-  width: 100%;
-  min-height: 80px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  position: relative;
+	background-color: var(--background);
+	color: var(--textColor);
+	width: 100%;
+	min-height: 80px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	position: relative;
 }
 
-.todoName {
-  margin: 10px 40px 4px 40px;
-  word-break: break-word;
+.todoNameAdderInput {
+	margin: 10px 40px 4px 40px;
+	word-break: break-word;
 }
 
 .dueDateAndTime {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  margin: 5px 10px 10px 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-evenly;
+	margin: 5px 10px 10px 10px;
 }
 
 .dueDateAndTime p {
-  margin: 0;
+	margin: 0;
 }
 
 .themeSwitcher {
-  background-color: var(--background);
-  color: var(--textColor);
-  border: 1px solid var(--borderColor);
-  padding: 5px 10px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+	background-color: var(--background);
+	color: var(--textColor);
+	border: 1px solid var(--borderColor);
+	padding: 5px 10px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
-.deleteAll, .presetBtn {
-  background-color: var(--background);
-  color: var(--textColor);
-  border: 1px solid var(--borderColor);
-  padding: 5px 10px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.deleteAll,
+.presetBtn {
+	background-color: var(--background);
+	color: var(--textColor);
+	border: 1px solid var(--borderColor);
+	padding: 5px 10px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
 .deleteAll:hover {
-  background-color: red;
+	background-color: red;
 }
 
 .openColorPicker {
-  background-color: var(--background);
-  color: var(--textColor);
-  border: 1px solid var(--borderColor);
-  padding: 5px 10px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+	background-color: var(--background);
+	color: var(--textColor);
+	border: 1px solid var(--borderColor);
+	padding: 5px 10px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
-.openColorPicker:hover, .themeSwitcher:hover, .presetBtn:hover {
-  background-color: var(--evenMoreOffBackground);
+.openColorPicker:hover,
+.themeSwitcher:hover,
+.presetBtn:hover {
+	background-color: var(--evenMoreOffBackground);
 }
 
 /* To hide men when not open */
 .menu {
-  display: none;
+	display: none;
 }
 
 /* The menu when its open */
 .menuOpen .menu {
-  border: 1px solid var(--textColor);
-  position: absolute;
-  top: 20px;
-  right: 5px;
-  background-color: var(--background);
-  padding: 6px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  z-index: 2;
-  box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.2);
+	border: 1px solid var(--textColor);
+	position: absolute;
+	top: 20px;
+	right: 5px;
+	background-color: var(--background);
+	padding: 6px;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	z-index: 2;
+	box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.2);
 }
 
 .menuOpen .menu button {
-  margin: 1px;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: var(--textColor);
-  color: var(--background);
-  cursor: pointer;
+	margin: 1px;
+	border: none;
+	border-radius: 5px;
+	padding: 5px;
+	background-color: var(--textColor);
+	color: var(--background);
+	cursor: pointer;
 }
 
 /* The ... button to open menu */
 .openMenu {
-  position: absolute;
-  top: -10px;
-  right: 0px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 2em;
-  height: 45px;
-  width: 40px;
-  padding: 10px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	position: absolute;
+	top: -10px;
+	right: 0px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 2em;
+	height: 45px;
+	width: 40px;
+	padding: 10px;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .openMenu svg {
-  fill: var(--textColor);
+	fill: var(--textColor);
 }
 
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 50%;
-  transform: translate(-50%, -50%);
-  padding: 10px;
-  background-color: var(--background);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
-  border: 1px solid var(--borderColor);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 50%;
+	transform: translate(-50%, -50%);
+	padding: 10px;
+	background-color: var(--background);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 2;
+	border-radius: 5px;
+	box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
+	border: 1px solid var(--borderColor);
 }
 
 .modal > * {
-  margin: 5px;
-  width: 100%;
-  box-sizing: border-box;
+	margin: 5px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .closeModal {
-  position: absolute;
-  top: 5px;
-  right: 0px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  width: unset;
+	position: absolute;
+	top: 5px;
+	right: 0px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	width: unset;
 }
 
 .hidden {
-  display: none;
+	display: none;
 }
 
 .modalBackdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 1;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.3);
+	z-index: 1;
 }
 
 .tags {
-  display: flex;
-  flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .tag {
-  background-color: lightgrey;
-  color: var(--textColor);
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
-  overflow: hidden;
-  text-align: center;
-  flex-shrink: 0;
-  word-break: break-all;
-  flex-shrink: 1;
-  max-width: 250px;
+	background-color: lightgrey;
+	color: var(--textColor);
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	overflow: hidden;
+	text-align: center;
+	word-break: break-all;
+	flex-shrink: 1;
+	max-width: 250px;
 }
 
 .colorPickerMenu {
-  box-sizing: border-box;
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  top: 0px;
-  right: 0px;
-  height: 100vh;
-  max-width: 100vw;
-  z-index: 3;
-  transform: translateX(200vw);
+	box-sizing: border-box;
+	position: fixed;
+	display: flex;
+	flex-direction: row;
+	top: 0px;
+	right: 0px;
+	height: 100vh;
+	max-width: 100vw;
+	z-index: 3;
+	transform: translateX(200vw);
 
-  transition: transform 0.4s ease;
+	transition: transform 0.4s ease;
 }
 
 .colorPickerMenuLeft {
-  padding-top: 10px;
+	padding-top: 10px;
 }
 
 .colorPickerMenuRight {
-  background-color: var(--background);
-  padding: 10px;
-  border-left: 1px solid var(--borderColor);
-  box-shadow: -8px 0px 10px -6px black;
-  margin-left: 10px;
-  overflow-x: scroll;
+	background-color: var(--background);
+	padding: 10px;
+	border-left: 1px solid var(--borderColor);
+	box-shadow: -8px 0px 10px -6px black;
+	margin-left: 10px;
+	overflow-x: scroll;
 }
 
 .saveColor {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .closeColorPicker {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 .openedColorPicker {
-  transform: translateX(0px) !important;
+	/* biome-ignore lint/complexity/noImportantStyles: <its important :shrug:> */
+	transform: translateX(0px) !important;
 }
 
-.saveColor, .closeColorPicker, .deselectTag, .randomizeColors, .addTodo, .addBoardBtn {
-  background-color: var(--background);
-  color: var(--textColor);
-  border: 1px solid var(--borderColor);
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 5px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  transition: background-color 0.2s ease;
-  font-size: 1em;
-  margin: 5px;
+.saveColor,
+.closeColorPicker,
+.deselectTag,
+.randomizeColors,
+.addTodo,
+.addBoardBtn {
+	background-color: var(--background);
+	color: var(--textColor);
+	border: 1px solid var(--borderColor);
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 5px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	transition: background-color 0.2s ease;
+	font-size: 1em;
+	margin: 5px;
 }
 
 .addTodo {
-  margin: 0;
-  white-space: nowrap;
+	margin: 0;
+	white-space: nowrap;
 }
 
 .deselectTag {
-  margin-top: 40px;
+	margin-top: 40px;
 }
 
-.closeColorPicker:hover, .saveColor:hover, .deselectTag:hover, .randomizeColors:hover, .addTodo:hover, .addBoardBtn:hover {
-  background-color: var(--evenMoreOffBackground);
+.closeColorPicker:hover,
+.saveColor:hover,
+.deselectTag:hover,
+.randomizeColors:hover,
+.addTodo:hover,
+.addBoardBtn:hover {
+	background-color: var(--evenMoreOffBackground);
 }
 
 .color-picker-tags {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .color-picker-tag {
-  padding: 5px;
-  margin: 5px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
-  cursor: pointer;
-  background-color: lightgrey;
-  color: var(--textColor);
+	padding: 5px;
+	margin: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
+	cursor: pointer;
+	background-color: lightgrey;
+	color: var(--textColor);
 }
 
 .color-picker-tag.selected {
-  box-shadow: 4px 4px 8px rgba(128, 128, 128, 0.5);
+	box-shadow: 4px 4px 8px rgba(128, 128, 128, 0.5);
 }
 
 .navbar {
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px;
-  background-color: var(--offBackground);
-  box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.2);
-  z-index: 1;
+	box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px;
+	background-color: var(--offBackground);
+	box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.2);
+	z-index: 1;
 }
 
-.navbarLeft, .navbarRight {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5px;
+.navbarLeft,
+.navbarRight {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 5px;
 }
 
 .navbarRight select {
-  width: 10em;
+	width: 10em;
 }
 
 .checkmark {
-  background: transparent;
-  border: none;
+	background: transparent;
+	border: none;
 
-  position: absolute;
-  top: 0;
-  left: 0;
-  cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer;
 }
 
 .checkmark svg {
-  width: 30px;
-  height: 30px;
+	width: 30px;
+	height: 30px;
 }
 
 .adderContent {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 55px;
-  left: 10px;
-  background-color: var(--background);
-  border-radius: 10px;
-  box-shadow: 0px 0px 16px rgba(0,0,0,0.3);
-  z-index: 2;
-  min-width: 22em;
-  max-width: 40vw;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	top: 55px;
+	left: 10px;
+	background-color: var(--background);
+	border-radius: 10px;
+	box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.3);
+	z-index: 2;
+	min-width: 22em;
+	max-width: 40vw;
 }
 
 .adderBtn h1 {
-  font-size: 2em;
-  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-  color: var(--textColor);
-  line-height: 0.85em;
-  margin: 0;
+	font-size: 2em;
+	filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+	color: var(--textColor);
+	line-height: 0.85em;
+	margin: 0;
 }
 
 .adderBtn {
-  cursor: pointer;
-  z-index: 2;
-  height: 2em;
-  width: 2em;
-  line-height: 1em;
-  text-align: center;
+	cursor: pointer;
+	z-index: 2;
+	height: 2em;
+	width: 2em;
+	line-height: 1em;
+	text-align: center;
 }
 
 .adderDateAndTime {
-  background-color: var(--offBackground);
-  border-bottom: 1px solid var(--borderColor);
+	background-color: var(--offBackground);
+	border-bottom: 1px solid var(--borderColor);
 }
 
 .dueTextAdder {
-  padding-left: 7px;
-  padding-right: 7px;
-  margin: 0;
+	padding-left: 7px;
+	padding-right: 7px;
+	margin: 0;
 }
 
 .adderContent button {
-  width: calc(100% - 20px);
-  margin: 10px;
-  background-color: var(--textColor);
-  color: var(--background);
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 1.2em;
-  border: none;
-  box-sizing: border-box;
+	width: calc(100% - 20px);
+	margin: 10px;
+	background-color: var(--textColor);
+	color: var(--background);
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 1.2em;
+	border: none;
+	box-sizing: border-box;
 }
 
 .adderAddTodo > div {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
-.adderDate, .adderTime {
-  width: 100%;
+.adderDate,
+.adderTime {
+	width: 100%;
 }
 
-.adderDate input, .adderTime input {
-  border-bottom: 0px !important;
+.adderDate input,
+.adderTime input {
+	/* biome-ignore lint/complexity/noImportantStyles: <its important> */
+	border-bottom: 0px !important;
 }
 
 .adderAddBoard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .adderAddBoard input {
-  border-radius: 10px 10px 0 0;
-} 
-
-.adderAddTodo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	border-radius: 10px 10px 0 0;
 }
 
-.adderAddTodo input, .adderAddBoard input, .adderAddTodo select {
-  width: 100%;
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 1px solid var(--borderColor);
-  padding: 10px;
-  font-size: 1.2em;
+.adderAddTodo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.adderAddTodo input,
+.adderAddBoard input,
+.adderAddTodo select {
+	width: 100%;
+	box-sizing: border-box;
+	border: none;
+	border-bottom: 1px solid var(--borderColor);
+	padding: 10px;
+	font-size: 1.2em;
 }
 
 .previewTags {
-  display: flex;
-  border-bottom: 1px solid var(--borderColor);
-  min-width: 100%;
-  overflow-x: scroll;
+	display: flex;
+	border-bottom: 1px solid var(--borderColor);
+	min-width: 100%;
+	overflow-x: scroll;
 }
 
 .previewTags * {
-  flex-shrink: 0;
-  height: 100%;
+	flex-shrink: 0;
+	height: 100%;
 }
 
 .navbarRightOpener {
-  display: none;
+	display: none;
 }
 
 @media (max-width: 500px) {
-  .boards {
-    flex-direction: column;
-    overflow-X: hidden;
-  }
+	.boards {
+		flex-direction: column;
+		overflow-X: hidden;
+	}
 
-  .addBoard.droppable {
-    width: calc(100% - 12px);
-  }
+	.addBoard.droppable {
+		width: calc(100% - 12px);
+	}
 
-  .droppable {
-    width: 100%;
-    min-height: 110px;
-  }
+	.droppable {
+		width: 100%;
+		min-height: 110px;
+	}
 
-  .trash {
-    width: 100%;
-  }
+	.trash {
+		width: 100%;
+	}
 
-  .adderContent {
-    width: 90vw;
-    max-width: 90vw;
-    min-width: 90vw;
-  }
+	.adderContent {
+		width: 90vw;
+		max-width: 90vw;
+		min-width: 90vw;
+	}
 
-  .navbarRight {
-    visibility: hidden;
-    position: absolute;
-    top: 50px;
-  }
+	.navbarRight {
+		visibility: hidden;
+		position: absolute;
+		top: 50px;
+	}
 
-  .navbarRight > h3 {
-    margin: 3px;
-  }
-  
-  .navbarRight.openedRightNavbar {
-    visibility: visible;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    padding: 10px;
-    right: 0;
-    background-color: var(--background);
-    border-radius: 10px;
-    box-shadow: 0px 0px 16px rgba(0,0,0,0.3);
-    z-index: 2;
+	.navbarRight > h3 {
+		margin: 3px;
+	}
 
-    background-color: var(--background);
-  }
+	.navbarRight.openedRightNavbar {
+		visibility: visible;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin: 10px;
+		padding: 10px;
+		right: 0;
+		background-color: var(--background);
+		border-radius: 10px;
+		box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.3);
+		z-index: 2;
+	}
 
-  .navbarRightOpener {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+	.navbarRightOpener {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-  .navbarOpener {
-    border: none;
-    background-color: transparent;
-    color: var(--textColor);
-    cursor: pointer;
-    font-size: 1.2em;
-    transform: rotate(0deg);
-    transition: transform 0.2s ease-in-out;
-  }
+	.navbarOpener {
+		border: none;
+		background-color: transparent;
+		color: var(--textColor);
+		cursor: pointer;
+		font-size: 1.2em;
+		transform: rotate(0deg);
+		transition: transform 0.2s ease-in-out;
+	}
 
-  .navbarOpener.openedRightNavbar {
-    transform: rotate(180deg);
-  }
+	.navbarOpener.openedRightNavbar {
+		transform: rotate(180deg);
+	}
 }

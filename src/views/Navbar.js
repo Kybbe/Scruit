@@ -1,191 +1,374 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { v4 as uuidv4 } from "uuid";
 import Adder from "../components/Adder";
 import TagColorPicker from "../components/TagColorPicker";
 
-import { v4 as uuidv4 } from 'uuid';
-
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const todos = useSelector(state => state.todos);
-  const boards = Object.keys(todos);
-  const automatedBoardInReducer = useSelector(state => state.automatedDoneBoard);
-  let doneBoardSelect = useRef("");
+	const dispatch = useDispatch();
+	const todos = useSelector((state) => state.todos);
+	const boards = Object.keys(todos);
+	const automatedBoardInReducer = useSelector(
+		(state) => state.automatedDoneBoard,
+	);
+	const doneBoardSelect = useRef("");
 
-  useEffect(() => {
-    if (boards.length > 0) {
-      doneBoardSelect.current.value = automatedBoardInReducer;
-    }
-  }, [automatedBoardInReducer]);
+	useEffect(() => {
+		if (boards.length > 0) {
+			doneBoardSelect.current.value = automatedBoardInReducer;
+		}
+	}, [automatedBoardInReducer, boards.length]);
 
-  function setAutomatedDoneBoard() {
-    dispatch({
-      type: "SET_AUTOMATED_DONE_BOARD",
-      payload: doneBoardSelect.current.value
-    });
-  }
+	function setAutomatedDoneBoard() {
+		dispatch({
+			type: "SET_AUTOMATED_DONE_BOARD",
+			payload: doneBoardSelect.current.value,
+		});
+	}
 
-  useEffect(() => {
-    let theme = localStorage.getItem("theme")
-    if(theme === "dark") {
-      document.body.classList.add("dark-theme")
-    } else if(theme !== "light") {
-      const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if(userPrefersDark) {
-        document.body.classList.add("dark-theme")
-      }
-    }
-  })
+	useEffect(() => {
+		const theme = localStorage.getItem("theme");
+		if (theme === "dark") {
+			document.body.classList.add("dark-theme");
+		} else if (theme !== "light") {
+			const userPrefersDark = window.matchMedia?.(
+				"(prefers-color-scheme: dark)",
+			).matches;
 
-  function switchTheme() {
-    document.body.classList.toggle("dark-theme")
-    let previousTheme = localStorage.getItem("theme");
-    if(previousTheme === "dark"){
-      localStorage.setItem("theme", "light")
-    } else {
-      localStorage.setItem("theme", "dark")
-    }
-  }
+			if (userPrefersDark) {
+				document.body.classList.add("dark-theme");
+			}
+		}
+	});
 
-  function deleteAll() {
-    dispatch({ type: "DELETE_ALL" });
-  }
+	function switchTheme() {
+		document.body.classList.toggle("dark-theme");
+		const previousTheme = localStorage.getItem("theme");
+		if (previousTheme === "dark") {
+			localStorage.setItem("theme", "light");
+		} else {
+			localStorage.setItem("theme", "dark");
+		}
+	}
 
-  function openColorPicker() {
-    document.getElementsByClassName("colorPickerMenu")[0].classList.toggle("openedColorPicker");
-  }
+	function deleteAll() {
+		dispatch({ type: "DELETE_ALL" });
+	}
 
-  function openRightNavbar() {
-    document.getElementsByClassName("navbarRight")[0].classList.toggle("openedRightNavbar");
-    document.getElementsByClassName("navbarOpener")[0].classList.toggle("openedRightNavbar");
-  }
+	function openColorPicker() {
+		document
+			.getElementsByClassName("colorPickerMenu")[0]
+			.classList.toggle("openedColorPicker");
+	}
 
-  //create a random date in YYYY-MM-DD format
-  function randomDate() {
-    var date;
-    if(Math.random() > 0.5){ //50% chance of being in the past
-      date = new Date(+(new Date()) - Math.floor(Math.random() * 10000000000));
-    } else {
-      date = new Date(+(new Date()) + Math.floor(Math.random() * 10000000000));
-    }
-      
-    return date.toISOString().slice(0, 10);
-  }
+	function openRightNavbar() {
+		document
+			.getElementsByClassName("navbarRight")[0]
+			.classList.toggle("openedRightNavbar");
+		document
+			.getElementsByClassName("navbarOpener")[0]
+			.classList.toggle("openedRightNavbar");
+	}
 
-  //create a random time in HH:MM format
-  function randomTime() {
-    var hours = Math.floor(Math.random() * 24);
-    var minutes = Math.floor(Math.random() * 60);
-    return ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2);
-  } 
+	//create a random date in YYYY-MM-DD format
+	function randomDate() {
+		var date;
+		if (Math.random() > 0.5) {
+			//50% chance of being in the past
+			date = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
+		} else {
+			date = new Date(Date.now() + Math.floor(Math.random() * 10000000000));
+		}
 
-  async function addKanbanPreset() {
-    await dispatch({ type: "ADD_BOARD", payload: "To Do" });
-    await dispatch({ type: "ADD_BOARD", payload: "In Progress" });
-    await dispatch({ type: "ADD_BOARD", payload: "Done" });
+		return date.toISOString().slice(0, 10);
+	}
 
-    
-    let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep"];
-    let todos = names.map(name => {
-      let trueOrFalse = Math.random() > 0.5
-      let newTodo = {
-        name: name,
-        id: uuidv4(),
-        tags: ["coffee"],
-        date: randomDate(),
-        time: randomTime(),
-        completed: trueOrFalse,
-      }
-      return newTodo;
-    })
-    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: "To Do", todo: todo} }))
-  }
+	//create a random time in HH:MM format
+	function randomTime() {
+		var hours = Math.floor(Math.random() * 24);
+		var minutes = Math.floor(Math.random() * 60);
+		return `${(`0${hours}`).slice(-2)}:${(`0${minutes}`).slice(-2)}`;
+	}
 
-  async function addLargeKanbanPreset() {
-    let boardNames = ["To Do", "Backlog", "Sprint backlog", "In Progress", "Testing", "Needs to be deployed", "Done"];
-    boardNames.forEach(name => dispatch({ type: "ADD_BOARD", payload: name }))
+	async function addKanbanPreset() {
+		await dispatch({ type: "ADD_BOARD", payload: "To Do" });
+		await dispatch({ type: "ADD_BOARD", payload: "In Progress" });
+		await dispatch({ type: "ADD_BOARD", payload: "Done" });
 
-    let names = ["Buy coffee", "Brew coffee", "Drink coffee", "Eat coffee", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
-    let tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff"];
-    let todos = names.map(name => {
-      let trueOrFalse = Math.random() > 0.5
-      let newTodo = {
-        name: name,
-        id: uuidv4(),
-        tags: tags.slice(Math.floor(Math.random() * tags.length)),
-        date: randomDate(),
-        time: randomTime(),
-        completed: trueOrFalse,
-      }
-      let randomBoard = Math.floor(Math.random() * boardNames.length);
-      return {name: boardNames[randomBoard], todo: newTodo};
-    })
-    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: todo.name, todo: todo.todo} }))
-  }
+		const names = [
+			"Buy coffee",
+			"Brew coffee",
+			"Drink coffee",
+			"Eat coffee",
+			"Sleep",
+		];
+		const todos = names.map((name) => {
+			const trueOrFalse = Math.random() > 0.5;
+			const newTodo = {
+				name: name,
+				id: uuidv4(),
+				tags: ["coffee"],
+				date: randomDate(),
+				time: randomTime(),
+				completed: trueOrFalse,
+			};
+			return newTodo;
+		});
+		todos.forEach((todo) => {
+			dispatch({ type: "ADD_TODO", payload: { name: "To Do", todo: todo } });
+		});
+	}
 
-  async function stressTestBoard() {
-    let boardNames = ["ASDASDASDASDASDASDADS", "asdASDJKL ASDjl ASDljkADSLJK ADS JL", "3", "!,.()/{} [] sdasjkl ,  , m mas mads", "ASJL ASJK LASDLJ KDSJLK AJ KLDSAJLK ADSJLK DASJLKDJLK ASJL KDASLJK DSALJK DASJLKDLJS KAALDSJ LJ KDSAL JKDSA"];
-    boardNames.forEach(name => dispatch({ type: "ADD_BOARD", payload: name }))
+	async function addLargeKanbanPreset() {
+		const boardNames = [
+			"To Do",
+			"Backlog",
+			"Sprint backlog",
+			"In Progress",
+			"Testing",
+			"Needs to be deployed",
+			"Done",
+		];
+		boardNames.forEach((name) => {
+			dispatch({ type: "ADD_BOARD", payload: name });
+		});
 
-    let names = ["ASLDKJASLDKJASLDKLJASDL KASLJ DKL JASL JKDASJKL L JKDALS JDSLJ ALJ KADSAKLJ SKJLJL AKSDL JKSADJL KSL JKLJ KDASLJ KDSA", "ASDJASDJASDKJHASKDJHASKDJHASKDJAKSDJHAKSDJHKAJHSD", "3", "!;?=)(/&%€#{}{}{}}[[][]][|§|[]≈±≈][|§∞$£¥¢‰}≠¿", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3", "Sleep", "Code", "Game", "Add form to login", "Register old users", "asd", "Stuff", "3"];
-    let tags = ["Coffee", "Code", "Game", "Form", "Register", "NKO)(/&%TYUIO}{Ü][|˜Ü{üº¬ºﬂ·", ")J!)(F2e9ukf29ne9wef827J/KU)IJK=AS?DP", "Stuff", "HBNKIUYGJKIUHAKSDJALSHALKSDJLASKJDLASKJDALSKD", "AJ KLSDLJASDLJ K DLJSAL JKSADLJ KDSAJLK JLDSAJLK DSA"];
-    let todos = names.map(name => {
-      let trueOrFalse = Math.random() > 0.5
-      let newTodo = {
-        name: name,
-        id: uuidv4(),
-        tags: tags.slice(Math.floor(Math.random() * tags.length)),
-        date: randomDate(),
-        time: randomTime(),
-        completed: trueOrFalse,
-      }
-      let randomBoard = Math.floor(Math.random() * boardNames.length);
-      return {name: boardNames[randomBoard], todo: newTodo};
-    })
-    todos.forEach(todo => dispatch({ type: "ADD_TODO", payload: {name: todo.name, todo: todo.todo} }))
-  }
+		const names = [
+			"Buy coffee",
+			"Brew coffee",
+			"Drink coffee",
+			"Eat coffee",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+		];
+		const tags = ["Coffee", "Code", "Game", "Form", "Register", "Stuff"];
+		const todos = names.map((name) => {
+			const trueOrFalse = Math.random() > 0.5;
+			const newTodo = {
+				name: name,
+				id: uuidv4(),
+				tags: tags.slice(Math.floor(Math.random() * tags.length)),
+				date: randomDate(),
+				time: randomTime(),
+				completed: trueOrFalse,
+			};
+			const randomBoard = Math.floor(Math.random() * boardNames.length);
+			return { name: boardNames[randomBoard], todo: newTodo };
+		});
+		todos.forEach((todo) => {
+			dispatch({
+				type: "ADD_TODO",
+				payload: { name: todo.name, todo: todo.todo },
+			});
+		});
+	}
 
-  return (
-    <div className="navbar">
-      <div className="navbarLeft">
-        <button className="themeSwitcher" onClick={switchTheme}>Theme change</button>
-        <Adder />
-      </div>
+	async function stressTestBoard() {
+		const boardNames = [
+			"ASDASDASDASDASDASDADS",
+			"asdASDJKL ASDjl ASDljkADSLJK ADS JL",
+			"3",
+			"!,.()/{} [] sdasjkl ,  , m mas mads",
+			"ASJL ASJK LASDLJ KDSJLK AJ KLDSAJLK ADSJLK DASJLKDJLK ASJL KDASLJK DSALJK DASJLKDLJS KAALDSJ LJ KDSAL JKDSA",
+		];
+		boardNames.forEach((name) => {
+			dispatch({ type: "ADD_BOARD", payload: name });
+		});
 
-      { boards.length <= 0 ? (
-        <>
-          <div className="navbarRight">
-            <button className="presetBtn" onClick={addKanbanPreset}>Add kanban preset</button>
-            <button className="presetBtn" onClick={addLargeKanbanPreset}>Add large kanban preset</button>
-            <button className="presetBtn" onClick={stressTestBoard}>Add Stresstest preset</button>
-          </div>
-          <div className="navbarRightOpener">
-            <button className="navbarOpener" onClick={openRightNavbar}>⇩</button>
-          </div>
-        </>
-      ) : "" }
+		const names = [
+			"ASLDKJASLDKJASLDKLJASDL KASLJ DKL JASL JKDASJKL L JKDALS JDSLJ ALJ KADSAKLJ SKJLJL AKSDL JKSADJL KSL JKLJ KDASLJ KDSA",
+			"ASDJASDJASDKJHASKDJHASKDJHASKDJAKSDJHAKSDJHKAJHSD",
+			"3",
+			"!;?=)(/&%€#{}{}{}}[[][]][|§|[]≈±≈][|§∞$£¥¢‰}≠¿",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+			"Sleep",
+			"Code",
+			"Game",
+			"Add form to login",
+			"Register old users",
+			"asd",
+			"Stuff",
+			"3",
+		];
+		const tags = [
+			"Coffee",
+			"Code",
+			"Game",
+			"Form",
+			"Register",
+			"NKO)(/&%TYUIO}{Ü][|˜Ü{üº¬ºﬂ·",
+			")J!)(F2e9ukf29ne9wef827J/KU)IJK=AS?DP",
+			"Stuff",
+			"HBNKIUYGJKIUHAKSDJALSHALKSDJLASKJDLASKJDALSKD",
+			"AJ KLSDLJASDLJ K DLJSAL JKSADLJ KDSAJLK JLDSAJLK DSA",
+		];
+		const todos = names.map((name) => {
+			const trueOrFalse = Math.random() > 0.5;
+			const newTodo = {
+				name: name,
+				id: uuidv4(),
+				tags: tags.slice(Math.floor(Math.random() * tags.length)),
+				date: randomDate(),
+				time: randomTime(),
+				completed: trueOrFalse,
+			};
+			const randomBoard = Math.floor(Math.random() * boardNames.length);
+			return { name: boardNames[randomBoard], todo: newTodo };
+		});
+		todos.forEach((todo) => {
+			dispatch({
+				type: "ADD_TODO",
+				payload: { name: todo.name, todo: todo.todo },
+			});
+		});
+	}
 
-      { boards.length > 0 ? (
-        <>
-          <div className="navbarRight">
-            <h3>"Done" board: </h3>
-            <select ref={doneBoardSelect} onChange={setAutomatedDoneBoard}> 
-              <option value="">Select a board</option>
-              {boards.map(board => (
-                <option key={board} value={board}>{board}</option>
-              ))}
-            </select>
-            <button className="deleteAll" onClick={deleteAll}>Wipe Boards & Todos</button>
-            <button className="openColorPicker" onClick={openColorPicker}>Open Color Picker</button>
-            <TagColorPicker />
-          </div>
-          <div className="navbarRightOpener">
-            <button className="navbarOpener" onClick={openRightNavbar}>⇩</button>
-          </div>
-        </>
-      ) : ""}
-    </div>
-  );
+	return (
+		<div className="navbar">
+			<div className="navbarLeft">
+				<button type="button" className="themeSwitcher" onClick={switchTheme}>
+					Theme change
+				</button>
+				<Adder />
+			</div>
+
+			{boards.length <= 0 ? (
+				<>
+					<div className="navbarRight">
+						<button
+							type="button"
+							className="presetBtn"
+							onClick={addKanbanPreset}
+						>
+							Add kanban preset
+						</button>
+						<button
+							type="button"
+							className="presetBtn"
+							onClick={addLargeKanbanPreset}
+						>
+							Add large kanban preset
+						</button>
+						<button
+							type="button"
+							className="presetBtn"
+							onClick={stressTestBoard}
+						>
+							Add Stresstest preset
+						</button>
+					</div>
+					<div className="navbarRightOpener">
+						<button
+							type="button"
+							className="navbarOpener"
+							onClick={openRightNavbar}
+						>
+							⇩
+						</button>
+					</div>
+				</>
+			) : (
+				""
+			)}
+
+			{boards.length > 0 ? (
+				<>
+					<div className="navbarRight">
+						<h3>"Done" board: </h3>
+						<select ref={doneBoardSelect} onChange={setAutomatedDoneBoard}>
+							<option value="">Select a board</option>
+							{boards.map((board) => (
+								<option key={board} value={board}>
+									{board}
+								</option>
+							))}
+						</select>
+						<button type="button" className="deleteAll" onClick={deleteAll}>
+							Wipe Boards & Todos
+						</button>
+						<button
+							type="button"
+							className="openColorPicker"
+							onClick={openColorPicker}
+						>
+							Open Color Picker
+						</button>
+						<TagColorPicker />
+					</div>
+					<div className="navbarRightOpener">
+						<button
+							type="button"
+							className="navbarOpener"
+							onClick={openRightNavbar}
+						>
+							⇩
+						</button>
+					</div>
+				</>
+			) : (
+				""
+			)}
+		</div>
+	);
 }

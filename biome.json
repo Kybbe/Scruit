@@ -1,0 +1,18 @@
+{
+	"linter": {
+		"rules": {
+			"a11y": {
+				"noStaticElementInteractions": "off"
+			}
+		}
+	},
+	"files": {
+		"includes": [
+			"src/**/*.js",
+			"src/**/*.ts",
+			"src/**/*.jsx",
+			"src/**/*.tsx",
+			"src/**/*.json"
+		]
+	}
+}
