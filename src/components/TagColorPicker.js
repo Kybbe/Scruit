@@ -234,6 +234,12 @@ export default function TagColorPicker() {
 					if (e.key === "Enter") {
 						openColorPicker();
 					}
+					if (
+						e.key === "Escape" &&
+						menu.current.classList.contains("openedColorPicker")
+					) {
+						openColorPicker();
+					}
 				}}
 			>
 				<h1>Tags</h1>

@@ -10,6 +10,7 @@ export default function Home() {
 	const dispatch = useDispatch();
 	const todos = useSelector((state) => state.todos);
 	const boards = Object.keys(todos);
+	const automatedDoneBoard = useSelector((state) => state.automatedDoneBoard);
 	const boardName = useRef("");
 
 	function addBoard() {
@@ -62,11 +63,19 @@ export default function Home() {
 		);
 		listCopy[source.droppableId] = newSourceList; //set the new source list
 		const destinationList = listCopy[destination.droppableId]; //get the destination list, where the draggable was dragged to
+		// If dropped into the done board, mark as completed
+		let elementToAdd = removedElement;
+		if (
+			destination.droppableId === automatedDoneBoard &&
+			elementToAdd &&
+			!elementToAdd.completed
+		) {
+			elementToAdd = { ...elementToAdd, completed: true };
+		}
 		listCopy[destination.droppableId] = addToList(
-			//add the draggable to the destination list
 			destinationList,
 			destination.index,
-			removedElement,
+			elementToAdd,
 		);
 
 		dispatch({ type: "UPDATE_TODOS", payload: listCopy }); //update the state
@@ -92,21 +101,24 @@ export default function Home() {
 						<button type="button" onClick={addBoard}>
 							Add Board
 						</button>
-						<Droppable droppableId={"TRASH"}>
-							{(provided, snapshot) => (
-								<div
-									ref={provided.innerRef}
-									className={
-										snapshot.isDraggingOver
-											? "droppable trash over-droppable"
-											: "droppable trash"
-									}
-									{...provided.droppableProps}
-								>
-									{provided.placeholder}
-								</div>
+						{boards.length > 0 &&
+							Object.values(todos).some((arr) => arr.length > 0) && (
+								<Droppable droppableId={"TRASH"}>
+									{(provided, snapshot) => (
+										<div
+											ref={provided.innerRef}
+											className={
+												snapshot.isDraggingOver
+													? "droppable trash over-droppable"
+													: "droppable trash"
+											}
+											{...provided.droppableProps}
+										>
+											{provided.placeholder}
+										</div>
+									)}
+								</Droppable>
 							)}
-						</Droppable>
 					</div>
 				</div>
 			</DragDropContext>

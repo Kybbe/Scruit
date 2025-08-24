@@ -8,7 +8,6 @@ export default function Adder() {
 	const boards = Object.keys(todos);
 	const tagsInput = useRef("");
 	const todoName = useRef("");
-	const boardName = useRef("");
 	const dateInput = useRef("");
 	const timeInput = useRef("");
 	const selectedBoard = useRef(0);
@@ -77,14 +76,6 @@ export default function Adder() {
 		}
 	}
 
-	function addBoard() {
-		const name = boardName.current.value;
-		if (name) {
-			dispatch({ type: "ADD_BOARD", payload: name });
-			boardName.current.value = "";
-		}
-	}
-
 	function updatePreviewTags() {
 		const tagsText = tagsInput.current.value;
 		const tags = tagsText.split(", ");
@@ -101,9 +92,9 @@ export default function Adder() {
 			if (e.target.id === "todoName") {
 				addTodo();
 			}
-			if (e.target.id === "boardName") {
-				addBoard();
-			}
+		}
+		if (e.key === "Escape" && open) {
+			setOpen(false);
 		}
 	}
 
@@ -116,18 +107,6 @@ export default function Adder() {
 				className="adderContent"
 				style={open ? { display: "block" } : { display: "none" }}
 			>
-				<div className="adderAddBoard">
-					<input
-						className="boardNameAdderInput"
-						type="text"
-						ref={boardName}
-						onKeyDown={handleKeyDown}
-						placeholder="Board title"
-					></input>
-					<button type="button" className="addBoard" onClick={addBoard}>
-						Add Board
-					</button>
-				</div>
 				<div className="adderAddTodo">
 					<input
 						disabled={greyOutTodo}
