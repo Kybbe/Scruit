@@ -291,6 +291,8 @@ export default function Navbar() {
 					Theme change
 				</button>
 				<Adder />
+
+				<p>Version: 1.1.0</p>
 			</div>
 
 			{boards.length <= 0 ? (
