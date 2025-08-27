@@ -100,9 +100,11 @@ export default function Adder() {
 
 	return (
 		<div className="adder">
-			<button type="button" className="adderBtn" onClick={openContent}>
-				<h1>+</h1>
-			</button>
+			{boards.length > 0 && (
+				<button type="button" className="adderBtn" onClick={openContent}>
+					+
+				</button>
+			)}
 			<div
 				className="adderContent"
 				style={open ? { display: "block" } : { display: "none" }}

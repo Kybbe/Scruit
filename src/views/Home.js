@@ -86,7 +86,7 @@ export default function Home() {
 			<Navbar />
 
 			<DragDropContext onDragEnd={onDragEnd}>
-				<div className="boards">
+				<div className={`boards ${boards.length === 0 ? "empty" : ""}`}>
 					{boards.map((board, index) => (
 						<ListComponent key={board} board={board} index={index} />
 					))}
