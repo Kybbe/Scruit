@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SketchPicker } from "react-color";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -137,7 +137,7 @@ export default function TagColorPicker() {
 		setSelectedTag("");
 	}
 
-	function addCss() {
+	const addCss = useCallback(() => {
 		var sheet;
 		var element;
 		if (document.getElementsByClassName("tag-color-picker")[0]) {
@@ -185,12 +185,11 @@ export default function TagColorPicker() {
 				sheet.cssRules.length,
 			);
 		});
-	}
+	}, [tagsAsObject.forEach]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <does what it does without the depenendencies>
 	useEffect(() => {
 		addCss();
-	}, [tags]);
+	}, [addCss]);
 
 	function openColorPicker() {
 		menu.current.classList.toggle("openedColorPicker");

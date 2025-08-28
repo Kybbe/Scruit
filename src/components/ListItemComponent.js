@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -55,7 +55,7 @@ export default function ListItemComponent({ todo, index, board }) {
 		card.current.classList.toggle("menuOpen");
 	}
 
-	function isTodoOverdue() {
+	const isTodoOverdue = useCallback(() => {
 		const date = todo.date;
 		const time = todo.time;
 		let currentDate = new Date();
@@ -75,12 +75,11 @@ export default function ListItemComponent({ todo, index, board }) {
 		} else {
 			setOverdue(false);
 		}
-	}
+	}, [todo.date, todo.time]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <will just rerender when not needed>
 	useEffect(() => {
 		isTodoOverdue();
-	}, []);
+	}, [isTodoOverdue]);
 
 	return (
 		<Draggable draggableId={String(todo.id)} key={todo.id} index={index}>
