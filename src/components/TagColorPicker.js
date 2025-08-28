@@ -15,6 +15,9 @@ export default function TagColorPicker() {
 	const [selectedTag, setSelectedTag] = useState("");
 	const [color, setColor] = useState("#fe752d");
 
+	const [tags, setTags] = useState([]);
+	const [tagsAsObject, setTagsAsObject] = useState([]);
+
 	const keys = Object.keys(state);
 	const boards = keys.map((key) => state[key]);
 
@@ -36,11 +39,10 @@ export default function TagColorPicker() {
 	];
 	// boards = [[{todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}, {todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}]]
 	//collpase all todos into one array
-	var tags = [];
 	boards.forEach((board) => {
 		board.forEach((todo) => {
 			todo.tags.forEach((tag) => {
-				tags.push(tag);
+				setTags((prevTags) => [...prevTags, tag]);
 			});
 		});
 	});
@@ -67,15 +69,18 @@ export default function TagColorPicker() {
 		}
 	}, [selectedTag]);
 
-	tags = [...new Set(tags)];
-	tags = tags.sort();
+	const uniqueTags = [...new Set(tags)];
+	const sortedTags = uniqueTags.sort();
+	setTags(sortedTags);
 
-	var tagsAsObject = [];
-	tags.forEach((tag) => {
-		tagsAsObject.push({
-			tag: tag,
-			color: "",
-		});
+	sortedTags.forEach((tag) => {
+		setTagsAsObject((prevTags) => [
+			...prevTags,
+			{
+				tag: tag,
+				color: "",
+			},
+		]);
 	});
 
 	//go through all colors from state and set the color for each tag
@@ -185,7 +190,7 @@ export default function TagColorPicker() {
 				sheet.cssRules.length,
 			);
 		});
-	}, [tagsAsObject.forEach]);
+	}, [tagsAsObject]);
 
 	useEffect(() => {
 		addCss();
