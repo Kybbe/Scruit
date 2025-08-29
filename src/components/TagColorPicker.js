@@ -15,11 +15,19 @@ export default function TagColorPicker() {
 	const [selectedTag, setSelectedTag] = useState("");
 	const [color, setColor] = useState("#fe752d");
 
-	const [tags, setTags] = useState([]);
-	const [tagsAsObject, setTagsAsObject] = useState([]);
-
-	const keys = Object.keys(state);
-	const boards = keys.map((key) => state[key]);
+	const tags = Object.values(state)
+		.flat()
+		.flatMap((todo) => todo.tags)
+		.filter(Boolean);
+	const uniqueTags = Array.from(new Set(tags));
+	const sortedTags = [...uniqueTags].sort();
+	const tagsAsObject = sortedTags.map((tag) => {
+		const colorObj = colorsFromState?.find((c) => c.tag === tag);
+		return {
+			tag,
+			color: colorObj ? colorObj.color : "",
+		};
+	});
 
 	const presetColors = [
 		"#FFB5E8",
@@ -39,27 +47,15 @@ export default function TagColorPicker() {
 	];
 	// boards = [[{todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}, {todo: "asd", id: "asd"}], [{todo: "asd", id: "asd"}]]
 	//collpase all todos into one array
-	boards.forEach((board) => {
-		board.forEach((todo) => {
-			todo.tags.forEach((tag) => {
-				setTags((prevTags) => [...prevTags, tag]);
-			});
-		});
-	});
-
 	useEffect(() => {
 		// Handler to call on window resize
 		function handleResize() {
-			// Set window width/height to state
 			setWidth(`${menu.current.clientWidth + 10}px`);
 		}
-		// Add event listener
 		window.addEventListener("resize", handleResize);
-		// Call handler right away so state gets updated with initial window size
 		handleResize();
-		// Remove event listener on cleanup
 		return () => window.removeEventListener("resize", handleResize);
-	}, []); // Empty array ensures that effect is only run on mount
+	}, []);
 
 	useEffect(() => {
 		if (selectedTag !== "") {
@@ -68,31 +64,6 @@ export default function TagColorPicker() {
 			rightPane.current.classList.add("hidden");
 		}
 	}, [selectedTag]);
-
-	const uniqueTags = [...new Set(tags)];
-	const sortedTags = uniqueTags.sort();
-	setTags(sortedTags);
-
-	sortedTags.forEach((tag) => {
-		setTagsAsObject((prevTags) => [
-			...prevTags,
-			{
-				tag: tag,
-				color: "",
-			},
-		]);
-	});
-
-	//go through all colors from state and set the color for each tag
-	if (colorsFromState) {
-		colorsFromState.forEach((colorFromState) => {
-			tagsAsObject.forEach((tag) => {
-				if (tag.tag === colorFromState.tag) {
-					tag.color = colorFromState.color;
-				}
-			});
-		});
-	}
 
 	function generateRandomColors() {
 		const randomColors = [];
@@ -149,41 +120,27 @@ export default function TagColorPicker() {
 			sheet = document.getElementsByClassName("tag-color-picker")[0].sheet;
 		} else {
 			element = document.createElement("style");
-
 			element.classList.add("tag-color-picker");
-
-			// Append style element to head
 			document.head.appendChild(element);
-
-			// Reference to the stylesheet
 			sheet = element.sheet;
 		}
-
 		//empty the stylesheet before adding new styles
-		var i;
-		for (i = 0; i < sheet.cssRules.length; i++) {
-			sheet.deleteRule(i);
+		while (sheet.cssRules.length > 0) {
+			sheet.deleteRule(0);
 		}
-
-		// Add CSS rules for all tags to have background-color set to the color of the tag
 		tagsAsObject.forEach((tag) => {
 			let textStyle = "";
-			var textColor = tag.color.substring(1); // strip #
-			var rgb = parseInt(textColor, 16); // convert rrggbb to decimal
-			var r = (rgb >> 16) & 0xff; // extract red
-			var g = (rgb >> 8) & 0xff; // extract green
-			var b = (rgb >> 0) & 0xff; // extract blue
-
-			var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-
-			if (luma > 90) {
-				textStyle = "#000";
-			} else if (luma === 0) {
+			var textColor = tag.color.substring(1);
+			var rgb = parseInt(textColor, 16);
+			var r = (rgb >> 16) & 0xff;
+			var g = (rgb >> 8) & 0xff;
+			var b = (rgb >> 0) & 0xff;
+			var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+			if (luma > 90 || luma === 0) {
 				textStyle = "#000";
 			} else {
 				textStyle = "#fff";
 			}
-			//remove spaces from tag.tag
 			const tagName = tag.tag.replace(/[^a-zA-Z0-9]/g, "");
 			sheet.insertRule(
 				`.${tagName.toLowerCase()} { background-color: ${tag.color}; color: ${textStyle} }`,
@@ -247,27 +204,17 @@ export default function TagColorPicker() {
 				}}
 			>
 				<h1>Tags</h1>
-				<p>Click on a tag to edit it's color</p>
+				<p>Click on a tag to edit its color</p>
 				<div className="color-picker-tags">
-					{tags.map((tag) => {
-						let thisTagsColor = "";
+					{tagsAsObject.map(({ tag, color: thisTagsColor }) => {
 						let thisTagsTextColor = "";
-						tagsAsObject.forEach((tagsObjTag) => {
-							if (tagsObjTag.tag === tag) {
-								thisTagsColor = tagsObjTag.color;
-							}
-						});
-						var textColor = thisTagsColor.substring(1); // strip #
-						var rgb = parseInt(textColor, 16); // convert rrggbb to decimal
-						var r = (rgb >> 16) & 0xff; // extract red
-						var g = (rgb >> 8) & 0xff; // extract green
-						var b = (rgb >> 0) & 0xff; // extract blue
-
-						var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-
-						if (luma > 90) {
-							thisTagsTextColor = "#000";
-						} else if (luma === 0) {
+						var textColor = thisTagsColor.substring(1);
+						var rgb = parseInt(textColor, 16);
+						var r = (rgb >> 16) & 0xff;
+						var g = (rgb >> 8) & 0xff;
+						var b = (rgb >> 0) & 0xff;
+						var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+						if (luma > 90 || luma === 0) {
 							thisTagsTextColor = "#000";
 						} else {
 							thisTagsTextColor = "#fff";
