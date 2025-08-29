@@ -82,7 +82,7 @@ export default function TagColorPicker({ open, onClose }) {
 				? colorsFromState.find((c) => c.tag === selectedTag)?.color || "#fe752d"
 				: "#fe752d",
 		);
-	}, [selectedTag, colorsFromState.find]);
+	}, [selectedTag, colorsFromState.find, colorsFromState]);
 
 	function generateRandomColors() {
 		const randomColors = [];
