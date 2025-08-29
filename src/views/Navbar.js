@@ -81,7 +81,7 @@ export default function Navbar() {
 				</button>
 				<Adder />
 
-				<p>Version: 1.1.0</p>
+				<p>Version: 2.4.16</p>
 			</div>
 
 			{boards.length <= 0 && (
