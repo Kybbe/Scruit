@@ -132,13 +132,26 @@ export default function ListItemComponent({ todo, index, board }) {
 							</svg>
 						</button>
 						<div className="menu">
-							<button type="button" onClick={openModal}>
+							<button
+								type="button"
+								onClick={openModal}
+								style={{
+									border: "1px solid orange",
+									backgroundColor: "#ffe6beff",
+									cursor: "pointer",
+								}}
+							>
 								Edit
 							</button>
 							<button
 								type="button"
 								onClick={() => {
 									deleteTodo(todo.id);
+								}}
+								style={{
+									border: "1px solid red",
+									backgroundColor: "#ffbebeff",
+									cursor: "pointer",
 								}}
 							>
 								Delete

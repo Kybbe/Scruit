@@ -38,6 +38,16 @@ const MenuReducer = (state = initialState, action) => {
 			const newTodosToRemoveState = { ...state.todos };
 			newTodosToRemoveState[action.payload.board] = newTodosToKeep;
 
+			//if last todo, clear the other state too
+			if (newTodosToKeep.length === 0) {
+				return {
+					...state,
+					todos: newTodosToRemoveState,
+					currentEditTodo: {},
+					colors: [],
+				};
+			}
+
 			return {
 				...state,
 				todos: newTodosToRemoveState,
@@ -105,6 +115,17 @@ const MenuReducer = (state = initialState, action) => {
 		case "REMOVE_BOARD": {
 			const newBoards2 = { ...state.todos };
 			delete newBoards2[action.payload];
+
+			//if last board, clear the other state too
+			if (Object.keys(newBoards2).length === 0) {
+				return {
+					...state,
+					todos: {},
+					currentEditTodo: {},
+					colors: [],
+					automatedDoneBoard: "",
+				};
+			}
 
 			return {
 				...state,

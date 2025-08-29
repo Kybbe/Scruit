@@ -83,14 +83,20 @@ export default function Home() {
 					{boards.map((board, index) => (
 						<ListComponent key={board} board={board} index={index} />
 					))}
-					<div className="addBoard droppable">
+					<div
+						className={`addBoard droppable${!Object.values(todos).some((arr) => arr.length > 0) ? " empty" : ""}`}
+					>
 						<MinimalInput
 							value={boardName}
 							onChange={(e) => {
-								console.log("onChange", e.target.value);
 								setBoardName(e.target.value);
 							}}
 							label="Board Title"
+							onKeyDown={(e) => {
+								if (e.key === "Enter") {
+									addBoard();
+								}
+							}}
 						/>
 						<button type="button" onClick={addBoard}>
 							Add Board

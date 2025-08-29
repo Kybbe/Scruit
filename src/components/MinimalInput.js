@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./MinimalInput.css";
 
 export default function MinimalInput({
@@ -9,6 +9,7 @@ export default function MinimalInput({
 	status,
 	required,
 	disabled,
+	onKeyDown,
 }) {
 	const [focused, setFocused] = useState(false);
 	const [hasEverFocused, setHasEverFocused] = useState(false);
@@ -22,6 +23,13 @@ export default function MinimalInput({
 	// Required logic
 	const showRequiredError = required && !focused && !value && hasEverFocused;
 	if (showRequiredError) statusClass = " error";
+
+	useEffect(() => {
+		//if value suddenly is blank, reset hasEverFocused
+		if (!value) {
+			setHasEverFocused(false);
+		}
+	}, [value]);
 
 	return (
 		<div
@@ -53,6 +61,7 @@ export default function MinimalInput({
 				disabled={!!disabled}
 				readOnly={!!disabled}
 				aria-required={!!required}
+				onKeyDown={onKeyDown}
 			/>
 		</div>
 	);

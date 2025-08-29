@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SketchPicker } from "react-color";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function TagColorPicker() {
+export default function TagColorPicker({ open, onClose }) {
 	const dispatch = useDispatch();
 
 	const state = useSelector((state) => state.todos);
@@ -10,6 +10,7 @@ export default function TagColorPicker() {
 
 	const menu = useRef("");
 	const rightPane = useRef("");
+	const modalBackdrop = useRef("");
 
 	const [width, setWidth] = useState(0);
 	const [selectedTag, setSelectedTag] = useState("");
@@ -56,6 +57,18 @@ export default function TagColorPicker() {
 		handleResize();
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
+
+	// Control menu/modalBackdrop visibility from parent
+	useEffect(() => {
+		if (open) {
+			menu.current.classList.add("openedColorPicker");
+			modalBackdrop.current.classList.remove("hidden");
+		} else {
+			menu.current.classList.remove("openedColorPicker");
+			modalBackdrop.current.classList.add("hidden");
+			setSelectedTag("");
+		}
+	}, [open]);
 
 	useEffect(() => {
 		if (selectedTag !== "") {
@@ -120,6 +133,7 @@ export default function TagColorPicker() {
 	}
 
 	const addCss = useCallback(() => {
+		console.log("addCss");
 		var sheet;
 		var element;
 		if (document.getElementsByClassName("tag-color-picker")[0]) {
@@ -159,132 +173,139 @@ export default function TagColorPicker() {
 		addCss();
 	}, [addCss]);
 
-	function openColorPicker() {
-		menu.current.classList.toggle("openedColorPicker");
-		rightPane.current.classList.add("hidden");
-		setSelectedTag("");
+	function openCloseColorPicker() {
+		if (onClose) onClose();
 	}
 
 	return (
-		<div
-			className="colorPickerMenu"
-			ref={menu}
-			style={{ transform: `translateX(${width})` }}
-		>
-			<div className="colorPickerMenuLeft" ref={rightPane}>
-				<SketchPicker
-					color={color}
-					presetColors={presetColors}
-					disableAlpha
-					onChange={(color) => {
-						setColor(color.hex);
-					}}
-				/>
-				<button
-					type="button"
-					onClick={(e) => {
-						onComplete();
-						e.stopPropagation();
-					}}
-					className="saveColor"
-				>
-					Save
-				</button>
-				<button
-					type="button"
-					className="deselectTag"
-					onClick={(e) => {
-						deselect();
-						e.stopPropagation();
-					}}
-				>
-					Cancel
-				</button>
-			</div>
+		<>
 			<div
-				type="button"
-				className="colorPickerMenuRight"
-				onClick={() => {
-					setSelectedTag("");
-				}}
-				onKeyDown={(e) => {
-					if (e.key === "Enter") {
-						openColorPicker();
-					}
-					if (
-						e.key === "Escape" &&
-						menu.current.classList.contains("openedColorPicker")
-					) {
-						openColorPicker();
-					}
-				}}
+				className="colorPickerMenu"
+				ref={menu}
+				style={{ transform: `translateX(${width})` }}
 			>
-				<h1>Tags</h1>
-				<p>Click on a tag to edit its color</p>
-				<div className="color-picker-tags">
-					{tagsAsObject.map(({ tag, color: thisTagsColor }) => {
-						let thisTagsTextColor = "";
-						var textColor = thisTagsColor.substring(1);
-						var rgb = parseInt(textColor, 16);
-						var r = (rgb >> 16) & 0xff;
-						var g = (rgb >> 8) & 0xff;
-						var b = (rgb >> 0) & 0xff;
-						var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-						if (luma > 90 || luma === 0) {
-							thisTagsTextColor = "#000";
-						} else {
-							thisTagsTextColor = "#fff";
-						}
-						return (
-							<div
-								key={`color-picker-tag-${tag}`}
-								onClick={(e) => {
-									selectTag(tag);
-									e.stopPropagation();
-								}}
-								onKeyDown={(e) => {
-									if (e.key === "Enter" || e.key === " ") {
-										selectTag(tag);
-										e.stopPropagation();
-									}
-								}}
-								className={`color-picker-tag ${selectedTag === tag ? "selected" : ""}`}
-								style={
-									selectedTag === tag
-										? { color: thisTagsTextColor, backgroundColor: color }
-										: {
-												color: thisTagsTextColor,
-												backgroundColor: thisTagsColor,
-											}
-								}
-							>
-								{tag}
-							</div>
-						);
-					})}
+				<div className="colorPickerMenuLeft" ref={rightPane}>
+					<SketchPicker
+						color={color}
+						presetColors={presetColors}
+						disableAlpha
+						onChange={(color) => {
+							setColor(color.hex);
+						}}
+					/>
 					<button
 						type="button"
-						className="randomizeColors"
-						onClick={generateRandomColors}
+						onClick={(e) => {
+							onComplete();
+							e.stopPropagation();
+						}}
+						className="saveColor"
 					>
-						Random colors for all tags
+						Save
 					</button>
 					<button
 						type="button"
-						className="randomizeColors"
-						onClick={randomPresetColors}
+						className="deselectTag"
+						onClick={(e) => {
+							deselect();
+							e.stopPropagation();
+						}}
 					>
-						Random pastel color for all tags
+						Cancel
 					</button>
 				</div>
-				<button
+				<div
 					type="button"
-					className="closeColorPicker"
-					onClick={openColorPicker}
+					className="colorPickerMenuRight"
+					onClick={() => {
+						setSelectedTag("");
+					}}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							openCloseColorPicker();
+						}
+						if (
+							e.key === "Escape" &&
+							menu.current.classList.contains("openedColorPicker")
+						) {
+							openCloseColorPicker();
+						}
+					}}
 				>
-					Close
-				</button>
+					<h1>Tags</h1>
+					<p>Click on a tag to edit its color</p>
+					<div className="color-picker-tags">
+						{tagsAsObject.map(({ tag, color: thisTagsColor }) => {
+							let thisTagsTextColor = "";
+							var textColor = thisTagsColor.substring(1);
+							var rgb = parseInt(textColor, 16);
+							var r = (rgb >> 16) & 0xff;
+							var g = (rgb >> 8) & 0xff;
+							var b = (rgb >> 0) & 0xff;
+							var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+							if (luma > 90 || luma === 0) {
+								thisTagsTextColor = "#000";
+							} else {
+								thisTagsTextColor = "#fff";
+							}
+							return (
+								<div
+									key={`color-picker-tag-${tag}`}
+									onClick={(e) => {
+										selectTag(tag);
+										e.stopPropagation();
+									}}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" || e.key === " ") {
+											selectTag(tag);
+											e.stopPropagation();
+										}
+									}}
+									className={`color-picker-tag ${selectedTag === tag ? "selected" : ""}`}
+									style={
+										selectedTag === tag
+											? { color: thisTagsTextColor, backgroundColor: color }
+											: {
+													color: thisTagsTextColor,
+													backgroundColor: thisTagsColor,
+												}
+									}
+								>
+									{tag}
+								</div>
+							);
+						})}
+						<button
+							type="button"
+							className="randomizeColors"
+							onClick={generateRandomColors}
+						>
+							Random colors for all tags
+						</button>
+						<button
+							type="button"
+							className="randomizeColors"
+							onClick={randomPresetColors}
+						>
+							Random pastel color for all tags
+						</button>
+					</div>
+					<button
+						type="button"
+						className="closeColorPicker"
+						onClick={openCloseColorPicker}
+					>
+						Close
+					</button>
+				</div>
 			</div>
-		</div>
+
+			<button
+				type="button"
+				ref={modalBackdrop}
+				onClick={openCloseColorPicker}
+				className="modalBackdrop hidden"
+			/>
+		</>
 	);
 }

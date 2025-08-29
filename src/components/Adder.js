@@ -24,11 +24,17 @@ export default function Adder() {
 		}
 	}, [boards, info]);
 
-	function openContent() {
+	function openCloseContent() {
 		if (open) {
 			setOpen(false);
+			document
+				.getElementsByClassName("modalBackdrop")[0]
+				.classList.add("hidden");
 		} else {
 			setOpen(true);
+			document
+				.getElementsByClassName("modalBackdrop")[0]
+				.classList.remove("hidden");
 		}
 	}
 
@@ -50,6 +56,7 @@ export default function Adder() {
 			if (/^\d/.test(tag)) {
 				tag = tag.substring(1);
 			}
+			tag = tag.trim();
 		});
 		if (tags[0] === "") {
 			tags = [];
@@ -76,14 +83,14 @@ export default function Adder() {
 				date: "",
 				time: "",
 			});
+			setPreviewTags([]);
 		} else {
 			alert("Please enter a todo name");
 		}
 	}
 
-	function updatePreviewTags() {
-		const tagsText = info.tags;
-		const tags = tagsText.split(",");
+	function updatePreviewTags(newTagsText) {
+		const tags = newTagsText.split(",");
 		tags.forEach((tag) => {
 			if (tag === "") {
 				tags.splice(tags.indexOf(tag), 1);
@@ -93,9 +100,16 @@ export default function Adder() {
 	}
 
 	return (
-		<div className="adder">
+		<div
+			className="adder"
+			onKeyDown={(e) => {
+				if (e.key === "Escape") {
+					openCloseContent();
+				}
+			}}
+		>
 			{boards.length > 0 && (
-				<button type="button" className="adderBtn" onClick={openContent}>
+				<button type="button" className="adderBtn" onClick={openCloseContent}>
 					+
 				</button>
 			)}
@@ -117,7 +131,7 @@ export default function Adder() {
 						value={info.tags}
 						onChange={(e) => {
 							setInfo({ ...info, tags: e.target.value });
-							updatePreviewTags();
+							updatePreviewTags(e.target.value);
 						}}
 						label="Tags"
 						placeholder="Tags, seperated, with, commas"
@@ -198,6 +212,12 @@ export default function Adder() {
 					</button>
 				</div>
 			</div>
+
+			<button
+				type="button"
+				onClick={openCloseContent}
+				className="modalBackdrop hidden"
+			/>
 		</div>
 	);
 }
