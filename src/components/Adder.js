@@ -1,29 +1,28 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import MinimalInput from "./MinimalInput";
 
 export default function Adder() {
 	const dispatch = useDispatch();
 	const todos = useSelector((state) => state.todos);
 	const boards = Object.keys(todos);
-	const tagsInput = useRef("");
-	const todoName = useRef("");
-	const dateInput = useRef("");
-	const timeInput = useRef("");
-	const selectedBoard = useRef(0);
+	const [info, setInfo] = useState({
+		name: "",
+		tags: "",
+		date: "",
+		time: "",
+		selectedBoard: boards.length > 0 ? boards[0] : "",
+	});
 
 	const [previewTags, setPreviewTags] = useState([]);
-
 	const [open, setOpen] = useState(false);
 
-	const [greyOutTodo, setGreyOutTodo] = useState(false);
 	useEffect(() => {
-		if (boards.length === 0) {
-			setGreyOutTodo(true);
-		} else {
-			setGreyOutTodo(false);
+		if (boards.length > 0 && !boards.includes(info.selectedBoard)) {
+			setInfo({ ...info, selectedBoard: boards[0] });
 		}
-	}, [boards]);
+	}, [boards, info]);
 
 	function openContent() {
 		if (open) {
@@ -34,13 +33,11 @@ export default function Adder() {
 	}
 
 	function addTodo() {
-		const name = todoName.current.value;
-		let tags = tagsInput.current.value;
-		const date = dateInput.current.value;
-		const time = timeInput.current.value;
+		const { name, tags: tagInfo, date, time } = info;
+		console.log("addtodo", info);
 
 		// make tags a array of strings split by ", "
-		tags = tags.split(", ");
+		let tags = tagInfo.split(",");
 		if (tags.length > 0 && tags[tags.length - 1] === "") {
 			tags.pop(); // remove last tag if it is empty
 		}
@@ -70,32 +67,29 @@ export default function Adder() {
 
 			dispatch({
 				type: "ADD_TODO",
-				payload: { name: selectedBoard.current.value, todo: newTodo },
+				payload: { name: info.selectedBoard, todo: newTodo },
 			});
-			todoName.current.value = "";
+			setInfo({
+				...info,
+				name: "",
+				tags: "",
+				date: "",
+				time: "",
+			});
+		} else {
+			alert("Please enter a todo name");
 		}
 	}
 
 	function updatePreviewTags() {
-		const tagsText = tagsInput.current.value;
-		const tags = tagsText.split(", ");
+		const tagsText = info.tags;
+		const tags = tagsText.split(",");
 		tags.forEach((tag) => {
 			if (tag === "") {
 				tags.splice(tags.indexOf(tag), 1);
 			}
 		});
 		setPreviewTags(tags);
-	}
-
-	function handleKeyDown(e) {
-		if (e.key === "Enter") {
-			if (e.target.id === "todoName") {
-				addTodo();
-			}
-		}
-		if (e.key === "Escape" && open) {
-			setOpen(false);
-		}
 	}
 
 	return (
@@ -110,32 +104,25 @@ export default function Adder() {
 				style={open ? { display: "block" } : { display: "none" }}
 			>
 				<div className="adderAddTodo">
-					<input
-						disabled={greyOutTodo}
-						style={
-							greyOutTodo
-								? { opacity: "0.3", backgroundColor: "lightgrey" }
-								: {}
-						}
-						className="todoNameAdderInput"
-						type="text"
-						ref={todoName}
-						onKeyDown={handleKeyDown}
+					<MinimalInput
+						value={info.name}
+						onChange={(e) => {
+							setInfo({ ...info, name: e.target.value });
+						}}
+						label="Todo Name"
 						placeholder="As a [who], I want [what] so that [why]"
-					></input>
-					<input
-						disabled={greyOutTodo}
-						style={
-							greyOutTodo
-								? { opacity: "0.3", backgroundColor: "lightgrey" }
-								: {}
-						}
-						className="tagsAdderInput"
-						type="text"
-						ref={tagsInput}
-						onChange={updatePreviewTags}
+						required
+					/>
+					<MinimalInput
+						value={info.tags}
+						onChange={(e) => {
+							setInfo({ ...info, tags: e.target.value });
+							updatePreviewTags();
+						}}
+						label="Tags"
 						placeholder="Tags, seperated, with, commas"
-					></input>
+					/>
+
 					<div
 						className="previewTags"
 						style={previewTags.length <= 0 ? { display: "none" } : {}}
@@ -155,43 +142,36 @@ export default function Adder() {
 								})
 							: ""}
 					</div>
-					<div
-						className="adderDateAndTime"
-						style={
-							greyOutTodo
-								? { opacity: "0.3", backgroundColor: "lightgrey" }
-								: {}
-						}
-					>
+
+					<div className="adderDateAndTime">
 						<p className="dueTextAdder">Due: </p>
 						<div className="adderDate">
 							<input
-								disabled={greyOutTodo}
-								style={greyOutTodo ? { backgroundColor: "lightgrey" } : {}}
-								ref={dateInput}
 								type="date"
 								placeholder="Date"
+								value={info.date}
+								onChange={(e) => {
+									setInfo({ ...info, date: e.target.value });
+								}}
 							></input>
 						</div>
 						<div className="adderTime">
 							<input
-								disabled={greyOutTodo}
-								style={greyOutTodo ? { backgroundColor: "lightgrey" } : {}}
-								ref={timeInput}
 								type="time"
 								placeholder="Time"
+								value={info.time}
+								onChange={(e) => {
+									setInfo({ ...info, time: e.target.value });
+								}}
 							></input>
 						</div>
 					</div>
 					<select
-						disabled={greyOutTodo}
-						style={
-							greyOutTodo
-								? { opacity: "0.3", backgroundColor: "lightgrey" }
-								: {}
-						}
-						ref={selectedBoard}
 						defaultValue={boards[0]}
+						value={info.selectedBoard}
+						onChange={(e) => {
+							setInfo({ ...info, selectedBoard: e.target.value });
+						}}
 					>
 						{boards.map((board) => (
 							<option key={board} value={board}>
@@ -201,9 +181,9 @@ export default function Adder() {
 					</select>
 					<button
 						type="button"
-						disabled={greyOutTodo}
+						disabled={boards.length === 0 || info.name === ""}
 						style={
-							greyOutTodo
+							boards.length === 0 || info.name === ""
 								? {
 										opacity: "0.3",
 										backgroundColor: "lightgrey",

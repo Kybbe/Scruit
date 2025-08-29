@@ -1,5 +1,5 @@
 * {
-	text-align: center;
+	box-sizing: border-box;
 }
 
 :root {
@@ -106,31 +106,21 @@ option {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 0.5em;
+	padding: 0.5em;
+	padding-bottom: 0;
 	height: 100%;
-}
-
-.addBoard input {
-	border: 1px solid var(--textColor);
-	border-radius: 5px;
-	padding: 5px;
-	margin: 5px;
-	margin-bottom: 0;
 }
 
 .addBoard button {
 	border: none;
 	border-radius: 5px;
 	padding: 5px;
-	margin: 5px;
+	margin: 0;
 	background-color: var(--textColor);
 	color: var(--background);
 	cursor: pointer;
-}
-
-.addBoard > * {
-	box-sizing: border-box;
-	width: 95%;
-	margin: 5px;
+	width: 100%;
 }
 
 #selectBoard {
@@ -143,7 +133,6 @@ option {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 50px;
-	width: 282px;
 	min-height: 122px;
 	margin: 0;
 }
@@ -183,6 +172,10 @@ option {
 	border-radius: 50%;
 	padding: 5px;
 	margin: 0;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .card {
@@ -192,6 +185,12 @@ option {
 	min-height: 80px;
 	box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.2);
 	position: relative;
+}
+
+.card .todoName {
+	margin-top: 2em;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .todoNameAdderInput {
@@ -318,7 +317,7 @@ option {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	z-index: 2;
+	z-index: 20;
 	border-radius: 5px;
 	box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 	border: 1px solid var(--borderColor);
@@ -351,7 +350,10 @@ option {
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(0, 0, 0, 0.3);
-	z-index: 1;
+	border: none;
+	padding: 0;
+	margin: 0;
+	z-index: 10;
 }
 
 .tags {
@@ -436,10 +438,7 @@ option {
 .addTodo {
 	margin: 0;
 	white-space: nowrap;
-}
-
-.deselectTag {
-	margin-top: 40px;
+	text-align: center;
 }
 
 .closeColorPicker:hover,
@@ -566,10 +565,6 @@ option {
 	font-size: 1.2em;
 	border: none;
 	box-sizing: border-box;
-}
-
-.adderAddTodo > * {
-	text-align: unset;
 }
 
 .adderAddTodo > div {

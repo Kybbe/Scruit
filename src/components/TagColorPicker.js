@@ -63,7 +63,13 @@ export default function TagColorPicker() {
 		} else {
 			rightPane.current.classList.add("hidden");
 		}
-	}, [selectedTag]);
+
+		setColor(
+			selectedTag
+				? colorsFromState.find((c) => c.tag === selectedTag)?.color || "#fe752d"
+				: "#fe752d",
+		);
+	}, [selectedTag, colorsFromState.find]);
 
 	function generateRandomColors() {
 		const randomColors = [];
@@ -184,6 +190,16 @@ export default function TagColorPicker() {
 				>
 					Save
 				</button>
+				<button
+					type="button"
+					className="deselectTag"
+					onClick={(e) => {
+						deselect();
+						e.stopPropagation();
+					}}
+				>
+					Cancel
+				</button>
 			</div>
 			<div
 				type="button"
@@ -259,9 +275,6 @@ export default function TagColorPicker() {
 						onClick={randomPresetColors}
 					>
 						Random pastel color for all tags
-					</button>
-					<button type="button" className="deselectTag" onClick={deselect}>
-						Deselect
 					</button>
 				</div>
 				<button

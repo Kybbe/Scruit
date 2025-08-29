@@ -1,9 +1,9 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import EditTodoModal from "../components/EditTodoModal";
 import ListComponent from "../components/ListComponent";
-
+import MinimalInput from "../components/MinimalInput";
 import Navbar from "./Navbar";
 
 export default function Home() {
@@ -11,19 +11,12 @@ export default function Home() {
 	const todos = useSelector((state) => state.todos);
 	const boards = Object.keys(todos);
 	const automatedDoneBoard = useSelector((state) => state.automatedDoneBoard);
-	const boardName = useRef("");
+	const [boardName, setBoardName] = useState("");
 
 	function addBoard() {
-		const name = boardName.current.value;
-		if (name) {
-			dispatch({ type: "ADD_BOARD", payload: name });
-			boardName.current.value = "";
-		}
-	}
-
-	function handleKeyDown(e) {
-		if (e.key === "Enter") {
-			addBoard();
+		if (boardName) {
+			dispatch({ type: "ADD_BOARD", payload: boardName });
+			setBoardName("");
 		}
 	}
 
@@ -91,13 +84,14 @@ export default function Home() {
 						<ListComponent key={board} board={board} index={index} />
 					))}
 					<div className="addBoard droppable">
-						<input
-							className="boardNameInput"
-							type="text"
-							ref={boardName}
-							onKeyDown={handleKeyDown}
-							placeholder="Board title"
-						></input>
+						<MinimalInput
+							value={boardName}
+							onChange={(e) => {
+								console.log("onChange", e.target.value);
+								setBoardName(e.target.value);
+							}}
+							label="Board Title"
+						/>
 						<button type="button" onClick={addBoard}>
 							Add Board
 						</button>

@@ -1,0 +1,61 @@
+.minimal-input-wrapper {
+  position: relative;
+  margin: 1em 0 0 0;
+  width: 100%;
+  height: 2em;
+}
+
+.minimal-input-label {
+  position: absolute;
+  left: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--textColor);
+  font-size: 1em;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  background: var(--background);
+  padding: 0 4px;
+}
+
+.minimal-input {
+  width: 100%;
+  height: 2em;
+
+  font-size: 1em;
+
+  background: var(--background);
+  border: 1px solid var(--textColor);
+	border-radius: 5px;
+
+  padding: 0.5em;
+
+  outline: none;
+  
+  transition: border-color 0.2s;
+}
+
+.minimal-input-label.lifted {
+  top: -4px;
+  left: 0.5em;
+  font-size: 0.8em;
+  color: var(--textColor);
+}
+
+.minimal-input-wrapper.success .minimal-input {
+  border-color: #28a745;
+}
+
+.minimal-input-wrapper.error .minimal-input {
+  border-color: #dc3545;
+}
+
+.minimal-input:disabled {
+  background: var(--background);
+  color: var(--borderColor);
+  cursor: not-allowed;
+}
+
+/* .minimal-input-wrapper.focused .minimal-input {
+  border-color: #007bff;
+} */

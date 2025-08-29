@@ -39,7 +39,7 @@ export default function ListItemComponent({ todo, index, board }) {
 		dispatch({ type: "UPDATE_TODOS", payload: todosCopy });
 	}
 
-	function openModal() {
+	function openModal(shouldCloseMenu) {
 		document.getElementsByClassName("modal")[0].classList.toggle("hidden");
 		document
 			.getElementsByClassName("modalBackdrop")[0]
@@ -48,10 +48,11 @@ export default function ListItemComponent({ todo, index, board }) {
 			type: "SET_CURRENT_EDIT_TODO",
 			payload: { ...todo, board: board },
 		});
-		openMenu();
+
+		shouldCloseMenu && openCloseMenu();
 	}
 
-	function openMenu() {
+	function openCloseMenu() {
 		card.current.classList.toggle("menuOpen");
 	}
 
@@ -90,7 +91,13 @@ export default function ListItemComponent({ todo, index, board }) {
 					{...provided.dragHandleProps}
 					className="draggable"
 				>
-					<div className="card" ref={card}>
+					<div
+						className="card"
+						ref={card}
+						onDoubleClick={() => {
+							openModal(false);
+						}}
+					>
 						<button type="button" className="checkmark" onClick={completeTodo}>
 							<svg
 								style={
@@ -111,7 +118,7 @@ export default function ListItemComponent({ todo, index, board }) {
 							</svg>
 						</button>
 						<h4 className="todoName">{todo.name}</h4>
-						<button type="button" className="openMenu" onClick={openMenu}>
+						<button type="button" className="openMenu" onClick={openCloseMenu}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 448 512"

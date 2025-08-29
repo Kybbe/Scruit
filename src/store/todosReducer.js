@@ -11,7 +11,12 @@ const MenuReducer = (state = initialState, action) => {
 		// name: the name of the board to which the todo belongs
 		// todo: the todo object
 		case "ADD_TODO": {
+			console.log("addtodo", action.payload);
 			const todosInBoard = state.todos[action.payload.name];
+			console.log("todosInBoard", todosInBoard);
+			if (todosInBoard === undefined) {
+				state.todos[action.payload.name] = [];
+			}
 			todosInBoard.push(action.payload.todo);
 
 			//add todosInBoard to state.todos

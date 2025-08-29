@@ -103,6 +103,9 @@ export default function EditTodoModal() {
 						<button type="button" onClick={editTodo}>
 							Save
 						</button>
+						<button type="button" className="cancelEdit" onClick={closeModal}>
+							Cancel
+						</button>
 						<button type="button" className="closeModal" onClick={closeModal}>
 							X
 						</button>
@@ -111,7 +114,11 @@ export default function EditTodoModal() {
 					""
 				)}
 			</div>
-			<div className="modalBackdrop hidden"></div>
+			<button
+				type="button"
+				className="modalBackdrop hidden"
+				onClick={closeModal}
+			></button>
 		</div>
 	);
 }
